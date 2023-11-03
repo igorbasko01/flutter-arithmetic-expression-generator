@@ -1,5 +1,9 @@
+import 'package:arithmetic_expressions_generator/bloc/arithmetic_bloc.dart';
+import 'package:arithmetic_expressions_generator/bloc/arithmetic_event.dart';
+import 'package:arithmetic_expressions_generator/bloc/arithmetic_state.dart';
 import 'package:arithmetic_expressions_generator/models/arithmetic_operation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -17,14 +21,17 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text('Arithmetic Exercise Generator'),
       ),
-      body: Column(
-          children: [
-            const Text('Welcome to the Arithmetic Exercise Generator!'),
-            _operationDropDown(),
-            ElevatedButton(
-                onPressed: () {}, child: const Text('Generate Exercise')),
-          ]
-      ),
+      body: BlocBuilder<ArithmeticBloc, ArithmeticState>(
+        builder: (blocContext, state) {
+          if (state is InitialArithmeticState) {
+            return _view('Welcome to the Arithmetic Exercise Generator!');
+          } else if (state is NewExerciseArithmeticState) {
+            return _view(state.asArithmeticString());
+          } else {
+            return Container();
+          }
+        },
+      )
     );
   }
 
@@ -41,6 +48,20 @@ class _MyHomePageState extends State<MyHomePage> {
       default:
         return '';
     }
+  }
+
+  Widget _view(String text) {
+    return Column(
+        children: [
+          Text(text),
+          _operationDropDown(),
+          ElevatedButton(
+              onPressed: () {
+                context.read<ArithmeticBloc>().add(
+                    GenerateNewExerciseArithmeticEvent(selectedOperation));
+              }, child: const Text('Generate Exercise')),
+        ]
+    );
   }
 
   DropdownButton<ArithmeticOperation> _operationDropDown() {
