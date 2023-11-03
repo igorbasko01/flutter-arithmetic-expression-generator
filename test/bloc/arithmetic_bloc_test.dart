@@ -6,6 +6,15 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  int _numberOfHiddenOperands(NewExerciseArithmeticState state) {
+    var visibleOperands = [
+      state.operand1.isVisible,
+      state.operand2.isVisible,
+      state.result.isVisible
+    ];
+    return visibleOperands.where((element) => !element).length;
+  }
+
   blocTest<ArithmeticBloc, ArithmeticState>(
       'Returns a new exercise state for addition event',
       build: () {
@@ -20,7 +29,8 @@ void main() {
               return state.operand1 >= 0 &&
                   state.operand2 >= 0 &&
                   state.operator == ArithmeticOperation.addition &&
-                  state.result == state.operand1 + state.operand2;
+                  state.result == state.operand1 + state.operand2 &&
+                  _numberOfHiddenOperands(state) == 1;
             }),
           ]);
 
@@ -34,7 +44,8 @@ void main() {
                   state.operand2 >= 0 &&
                   state.operand2 <= state.operand1 &&
                   state.operator == ArithmeticOperation.subtraction &&
-                  state.result == state.operand1 - state.operand2;
+                  state.result == state.operand1 - state.operand2 &&
+                  _numberOfHiddenOperands(state) == 1;
             })
           ]);
 
@@ -47,7 +58,8 @@ void main() {
               return state.operand1 >= 0 &&
                   state.operand2 >= 0 &&
                   state.operator == ArithmeticOperation.multiplication &&
-                  state.result == state.operand1 * state.operand2;
+                  state.result == state.operand1 * state.operand2 &&
+                  _numberOfHiddenOperands(state) == 1;
             })
           ]);
 
@@ -61,7 +73,8 @@ void main() {
                   state.operand2 >= 0 &&
                   state.operand2 <= state.operand1 &&
                   state.operator == ArithmeticOperation.division &&
-                  state.result == state.operand1 ~/ state.operand2;
+                  state.result == state.operand1 ~/ state.operand2 &&
+                  _numberOfHiddenOperands(state) == 1;
             })
           ]);
 }
