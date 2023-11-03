@@ -18,9 +18,9 @@ class NewExerciseArithmeticState extends ArithmeticState {
       case ArithmeticOperation.subtraction:
         return '$operand1 - $operand2 =';
       case ArithmeticOperation.multiplication:
-        return '$operand1 * $operand2 =';
+        return '$operand1 x $operand2 =';
       case ArithmeticOperation.division:
-        return '$operand1 / $operand2 =';
+        return '$operand1 : $operand2 =';
       default:
         return '';
     }

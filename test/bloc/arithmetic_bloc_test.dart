@@ -14,8 +14,6 @@ void main() {
       act: (bloc) {
         bloc.add(
             GenerateNewExerciseArithmeticEvent(ArithmeticOperation.addition));
-        bloc.add(
-            GenerateNewExerciseArithmeticEvent(ArithmeticOperation.addition));
       },
       expect: () => [
             predicate<NewExerciseArithmeticState>((state) {
@@ -23,10 +21,43 @@ void main() {
                   state.operand2 >= 0 &&
                   state.operator == ArithmeticOperation.addition;
             }),
+          ]);
+
+  blocTest('Returns new exercise for subtraction event',
+      build: () => ArithmeticBloc(),
+      act: (bloc) => bloc.add(
+          GenerateNewExerciseArithmeticEvent(ArithmeticOperation.subtraction)),
+      expect: () => [
             predicate<NewExerciseArithmeticState>((state) {
               return state.operand1 >= 0 &&
                   state.operand2 >= 0 &&
-                  state.operator == ArithmeticOperation.addition;
+                  state.operand2 <= state.operand1 &&
+                  state.operator == ArithmeticOperation.subtraction;
+            })
+          ]);
+
+  blocTest('Returns new exercise for multiplication event',
+      build: () => ArithmeticBloc(),
+      act: (bloc) => bloc.add(GenerateNewExerciseArithmeticEvent(
+          ArithmeticOperation.multiplication)),
+      expect: () => [
+            predicate<NewExerciseArithmeticState>((state) {
+              return state.operand1 >= 0 &&
+                  state.operand2 >= 0 &&
+                  state.operator == ArithmeticOperation.multiplication;
+            })
+          ]);
+
+  blocTest('Returns new exercise for division event',
+      build: () => ArithmeticBloc(),
+      act: (bloc) => bloc.add(
+          GenerateNewExerciseArithmeticEvent(ArithmeticOperation.division)),
+      expect: () => [
+            predicate<NewExerciseArithmeticState>((state) {
+              return state.operand1 >= 0 &&
+                  state.operand2 >= 0 &&
+                  state.operand2 <= state.operand1 &&
+                  state.operator == ArithmeticOperation.division;
             })
           ]);
 }
