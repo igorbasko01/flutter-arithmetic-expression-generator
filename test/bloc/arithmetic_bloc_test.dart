@@ -19,7 +19,8 @@ void main() {
             predicate<NewExerciseArithmeticState>((state) {
               return state.operand1 >= 0 &&
                   state.operand2 >= 0 &&
-                  state.operator == ArithmeticOperation.addition;
+                  state.operator == ArithmeticOperation.addition &&
+                  state.result == state.operand1 + state.operand2;
             }),
           ]);
 
@@ -32,7 +33,8 @@ void main() {
               return state.operand1 >= 0 &&
                   state.operand2 >= 0 &&
                   state.operand2 <= state.operand1 &&
-                  state.operator == ArithmeticOperation.subtraction;
+                  state.operator == ArithmeticOperation.subtraction &&
+                  state.result == state.operand1 - state.operand2;
             })
           ]);
 
@@ -44,7 +46,8 @@ void main() {
             predicate<NewExerciseArithmeticState>((state) {
               return state.operand1 >= 0 &&
                   state.operand2 >= 0 &&
-                  state.operator == ArithmeticOperation.multiplication;
+                  state.operator == ArithmeticOperation.multiplication &&
+                  state.result == state.operand1 * state.operand2;
             })
           ]);
 
@@ -57,7 +60,8 @@ void main() {
               return state.operand1 >= 0 &&
                   state.operand2 >= 0 &&
                   state.operand2 <= state.operand1 &&
-                  state.operator == ArithmeticOperation.division;
+                  state.operator == ArithmeticOperation.division &&
+                  state.result == state.operand1 ~/ state.operand2;
             })
           ]);
 }

@@ -26,33 +26,37 @@ class ArithmeticBloc extends Bloc<ArithmeticEvent, ArithmeticState> {
 
   NewExerciseArithmeticState _generateAdditionExercise() {
     var random = Random();
+    var operand1 = random.nextInt(31);
+    var operand2 = random.nextInt(31);
     return NewExerciseArithmeticState(
-        random.nextInt(31), random.nextInt(31), ArithmeticOperation.addition);
+        operand1, operand2, ArithmeticOperation.addition, operand1 + operand2);
   }
 
   NewExerciseArithmeticState _generateSubtractionExercise() {
     var random = Random();
-    var operand1 = random.nextInt(31);
-    var operand2 = random.nextInt(31);
-    return NewExerciseArithmeticState(
-        max(operand1, operand2),
-        min(operand1, operand2),
-        ArithmeticOperation.subtraction);
+    var first = random.nextInt(31);
+    var second = random.nextInt(31);
+    var operand1 = max(first, second);
+    var operand2 = min(first, second);
+    return NewExerciseArithmeticState(operand1, operand2,
+        ArithmeticOperation.subtraction, operand1 - operand2);
   }
 
   NewExerciseArithmeticState _generateMultiplicationExercise() {
     var random = Random();
-    return NewExerciseArithmeticState(
-        random.nextInt(11), random.nextInt(6), ArithmeticOperation.multiplication);
+    var operand1 = random.nextInt(11);
+    var operand2 = random.nextInt(6);
+    return NewExerciseArithmeticState(operand1, operand2,
+        ArithmeticOperation.multiplication, operand1 * operand2);
   }
 
   NewExerciseArithmeticState _generateDivisionExercise() {
     var random = Random();
-    var operand1 = random.nextInt(6) + 1;
-    var operand2 = random.nextInt(6) + 1;
+    var first = random.nextInt(6) + 1;
+    var second = random.nextInt(6) + 1;
+    var operand1 = max(first, second);
+    var operand2 = min(first, second);
     return NewExerciseArithmeticState(
-        max(operand1, operand2),
-        min(operand1, operand2),
-        ArithmeticOperation.division);
+        operand1, operand2, ArithmeticOperation.division, operand1 ~/ operand2);
   }
 }
