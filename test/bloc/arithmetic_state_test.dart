@@ -1,5 +1,6 @@
 import 'package:arithmetic_expressions_generator/bloc/arithmetic_state.dart';
 import 'package:arithmetic_expressions_generator/models/arithmetic_operation.dart';
+import 'package:arithmetic_expressions_generator/models/operand.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
