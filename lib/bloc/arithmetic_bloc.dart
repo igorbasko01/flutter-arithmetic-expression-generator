@@ -19,53 +19,58 @@ class ArithmeticBloc extends Bloc<ArithmeticEvent, ArithmeticState> {
 
   void _onGenerateNewExerciseArithmeticEvent(
       GenerateNewExerciseArithmeticEvent event, Emitter<ArithmeticState> emit) {
+    var hiddenOperand = _selectHiddenOperand(event.hideResultOnly);
     if (event.operation == ArithmeticOperation.addition) {
-      emit(_generateAdditionExercise());
+      emit(_generateAdditionExercise(hiddenOperand));
     } else if (event.operation == ArithmeticOperation.subtraction) {
-      emit(_generateSubtractionExercise());
+      emit(_generateSubtractionExercise(hiddenOperand));
     } else if (event.operation == ArithmeticOperation.multiplication) {
-      emit(_generateMultiplicationExercise());
+      emit(_generateMultiplicationExercise(hiddenOperand));
     } else if (event.operation == ArithmeticOperation.division) {
-      emit(_generateDivisionExercise());
+      emit(_generateDivisionExercise(hiddenOperand));
     }
   }
 
-  NewExerciseArithmeticState _generateAdditionExercise() {
-    var hidden = random.nextInt(3);
-    var operand1 = Operand(random.nextInt(31), isVisible: hidden != 0);
-    var operand2 = Operand(random.nextInt(31), isVisible: hidden != 1);
-    var result = Operand(operand1 + operand2, isVisible: hidden != 2);
+  int _selectHiddenOperand(bool hideResultOnly) {
+    if (hideResultOnly) {
+      return 2;
+    } else {
+      return random.nextInt(3);
+    }
+  }
+
+  NewExerciseArithmeticState _generateAdditionExercise(int hiddenOperand) {
+    var operand1 = Operand(random.nextInt(31), isVisible: hiddenOperand != 0);
+    var operand2 = Operand(random.nextInt(31), isVisible: hiddenOperand != 1);
+    var result = Operand(operand1 + operand2, isVisible: hiddenOperand != 2);
     return NewExerciseArithmeticState(
         operand1, operand2, ArithmeticOperation.addition, result);
   }
 
-  NewExerciseArithmeticState _generateSubtractionExercise() {
-    var hidden = random.nextInt(3);
+  NewExerciseArithmeticState _generateSubtractionExercise(int hiddenOperand) {
     var first = random.nextInt(31);
     var second = random.nextInt(31);
-    var operand1 = Operand(max(first, second), isVisible: hidden != 0);
-    var operand2 = Operand(min(first, second), isVisible: hidden != 1);
-    var result = Operand(operand1 - operand2, isVisible: hidden != 2);
+    var operand1 = Operand(max(first, second), isVisible: hiddenOperand != 0);
+    var operand2 = Operand(min(first, second), isVisible: hiddenOperand != 1);
+    var result = Operand(operand1 - operand2, isVisible: hiddenOperand != 2);
     return NewExerciseArithmeticState(
         operand1, operand2, ArithmeticOperation.subtraction, result);
   }
 
-  NewExerciseArithmeticState _generateMultiplicationExercise() {
-    var hidden = random.nextInt(3);
-    var operand1 = Operand(random.nextInt(11), isVisible: hidden != 0);
-    var operand2 = Operand(random.nextInt(6), isVisible: hidden != 1);
-    var result = Operand(operand1 * operand2, isVisible: hidden != 2);
+  NewExerciseArithmeticState _generateMultiplicationExercise(int hiddenOperand) {
+    var operand1 = Operand(random.nextInt(11), isVisible: hiddenOperand != 0);
+    var operand2 = Operand(random.nextInt(6), isVisible: hiddenOperand != 1);
+    var result = Operand(operand1 * operand2, isVisible: hiddenOperand != 2);
     return NewExerciseArithmeticState(
         operand1, operand2, ArithmeticOperation.multiplication, result);
   }
 
-  NewExerciseArithmeticState _generateDivisionExercise() {
-    var hidden = random.nextInt(3);
+  NewExerciseArithmeticState _generateDivisionExercise(int hiddenOperand) {
     var first = random.nextInt(6) + 1;
     var second = random.nextInt(6) + 1;
-    var operand1 = Operand(max(first, second), isVisible: hidden != 0);
-    var operand2 = Operand(min(first, second), isVisible: hidden != 1);
-    var result = Operand(operand1 ~/ operand2, isVisible: hidden != 2);
+    var operand1 = Operand(max(first, second), isVisible: hiddenOperand != 0);
+    var operand2 = Operand(min(first, second), isVisible: hiddenOperand != 1);
+    var result = Operand(operand1 ~/ operand2, isVisible: hiddenOperand != 2);
     return NewExerciseArithmeticState(
         operand1, operand2, ArithmeticOperation.division, result);
   }

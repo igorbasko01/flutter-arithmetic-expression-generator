@@ -132,4 +132,19 @@ void main() {
                   state.operand2.value == 2;
             })
           ]);
+
+  blocTest('Returns new exercise where the result is hidden',
+    build: () {
+      final mockRandom = MockRandom();
+      _mockRandomNumberGenerator(mockRandom, [0, 1, 2]);
+      return ArithmeticBloc(randomGenerator: mockRandom);
+    },
+    act: (bloc) => bloc.add(
+      GenerateNewExerciseArithmeticEvent(ArithmeticOperation.addition, hideResultOnly: true)),
+    expect: () => [
+      predicate<NewExerciseArithmeticState>((state) {
+        return _numberOfHiddenOperands(state) == 1 &&
+            state.result.isVisible == false;
+      })
+    ]);
 }
