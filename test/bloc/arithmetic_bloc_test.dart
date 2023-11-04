@@ -134,17 +134,44 @@ void main() {
           ]);
 
   blocTest('Returns new exercise where the result is hidden',
-    build: () {
-      final mockRandom = MockRandom();
-      _mockRandomNumberGenerator(mockRandom, [0, 1, 2]);
-      return ArithmeticBloc(randomGenerator: mockRandom);
-    },
-    act: (bloc) => bloc.add(
-      GenerateNewExerciseArithmeticEvent(ArithmeticOperation.addition, hideResultOnly: true)),
-    expect: () => [
-      predicate<NewExerciseArithmeticState>((state) {
-        return _numberOfHiddenOperands(state) == 1 &&
-            state.result.isVisible == false;
-      })
-    ]);
+      build: () {
+        final mockRandom = MockRandom();
+        _mockRandomNumberGenerator(mockRandom, [0, 1, 2]);
+        return ArithmeticBloc(randomGenerator: mockRandom);
+      },
+      act: (bloc) => bloc.add(GenerateNewExerciseArithmeticEvent(
+          ArithmeticOperation.addition,
+          hideResultOnly: true)),
+      expect: () => [
+            predicate<NewExerciseArithmeticState>((state) {
+              return _numberOfHiddenOperands(state) == 1 &&
+                  state.result.isVisible == false;
+            })
+          ]);
+
+  blocTest('Returns new addition exercise limited by the max operand value parameter',
+      build: () => ArithmeticBloc(),
+      act: (bloc) => bloc.add(GenerateNewExerciseArithmeticEvent(
+          ArithmeticOperation.addition,
+          maxOperandValue: 1)),
+      expect: () => [
+            predicate<NewExerciseArithmeticState>((state) {
+              return state.operand1.value <= 1 &&
+                  state.operand2.value <= 1 &&
+                  state.result.value <= 2;
+            })
+          ]);
+
+  blocTest('Returns new subtraction exercise limited by the max operand value parameter',
+      build: () => ArithmeticBloc(),
+      act: (bloc) => bloc.add(GenerateNewExerciseArithmeticEvent(
+          ArithmeticOperation.subtraction,
+          maxOperandValue: 1)),
+      expect: () => [
+            predicate<NewExerciseArithmeticState>((state) {
+              return state.operand1.value <= 1 &&
+                  state.operand2.value <= 1 &&
+                  state.result.value <= 1;
+            })
+          ]);
 }

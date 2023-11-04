@@ -5,6 +5,8 @@ sealed class ArithmeticEvent {}
 class GenerateNewExerciseArithmeticEvent extends ArithmeticEvent {
   final ArithmeticOperation operation;
   final bool hideResultOnly;
+  final int maxOperandValue;
 
-  GenerateNewExerciseArithmeticEvent(this.operation, {this.hideResultOnly = false});
+  GenerateNewExerciseArithmeticEvent(this.operation,
+      {this.hideResultOnly = false, this.maxOperandValue = 30});
 }

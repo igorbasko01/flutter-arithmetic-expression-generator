@@ -14,7 +14,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   ArithmeticOperation selectedOperation = ArithmeticOperation.addition;
+  bool showMaxOperandValueSlider = true;
   bool hideResultOnly = false;
+  int maxOperandValue = 30;
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _operationDropDown(),
       _generateExerciseButton(),
       _hideResultOnlyCheckbox(),
+      _maxOperandValueSlider(),
     ]);
   }
 
@@ -69,6 +72,12 @@ class _MyHomePageState extends State<MyHomePage> {
         onChanged: (ArithmeticOperation? operation) {
           setState(() {
             selectedOperation = operation!;
+            if (selectedOperation == ArithmeticOperation.multiplication ||
+                selectedOperation == ArithmeticOperation.division) {
+              showMaxOperandValueSlider = false;
+            } else {
+              showMaxOperandValueSlider = true;
+            }
           });
         });
   }
@@ -76,9 +85,10 @@ class _MyHomePageState extends State<MyHomePage> {
   ElevatedButton _generateExerciseButton() {
     return ElevatedButton(
         onPressed: () {
-          context.read<ArithmeticBloc>().add(
-              GenerateNewExerciseArithmeticEvent(selectedOperation,
-                  hideResultOnly: hideResultOnly));
+          context.read<ArithmeticBloc>().add(GenerateNewExerciseArithmeticEvent(
+              selectedOperation,
+              hideResultOnly: hideResultOnly,
+              maxOperandValue: maxOperandValue));
         },
         child: const Text('Generate Exercise'));
   }
@@ -92,5 +102,24 @@ class _MyHomePageState extends State<MyHomePage> {
             hideResultOnly = value!;
           });
         });
+  }
+
+  Visibility _maxOperandValueSlider() {
+    return Visibility(
+        visible: showMaxOperandValueSlider,
+        maintainSize: true,
+        maintainAnimation: true,
+        maintainState: true,
+        child: Slider(
+            value: maxOperandValue.toDouble(),
+            min: 0,
+            max: 1000,
+            divisions: 200,
+            label: 'Max operand value: $maxOperandValue',
+            onChanged: (double value) {
+              setState(() {
+                maxOperandValue = value.toInt();
+              });
+            }));
   }
 }

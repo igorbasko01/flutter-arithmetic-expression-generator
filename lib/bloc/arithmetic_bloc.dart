@@ -21,9 +21,9 @@ class ArithmeticBloc extends Bloc<ArithmeticEvent, ArithmeticState> {
       GenerateNewExerciseArithmeticEvent event, Emitter<ArithmeticState> emit) {
     var hiddenOperand = _selectHiddenOperand(event.hideResultOnly);
     if (event.operation == ArithmeticOperation.addition) {
-      emit(_generateAdditionExercise(hiddenOperand));
+      emit(_generateAdditionExercise(hiddenOperand, event.maxOperandValue));
     } else if (event.operation == ArithmeticOperation.subtraction) {
-      emit(_generateSubtractionExercise(hiddenOperand));
+      emit(_generateSubtractionExercise(hiddenOperand, event.maxOperandValue));
     } else if (event.operation == ArithmeticOperation.multiplication) {
       emit(_generateMultiplicationExercise(hiddenOperand));
     } else if (event.operation == ArithmeticOperation.division) {
@@ -39,17 +39,17 @@ class ArithmeticBloc extends Bloc<ArithmeticEvent, ArithmeticState> {
     }
   }
 
-  NewExerciseArithmeticState _generateAdditionExercise(int hiddenOperand) {
-    var operand1 = Operand(random.nextInt(31), isVisible: hiddenOperand != 0);
-    var operand2 = Operand(random.nextInt(31), isVisible: hiddenOperand != 1);
+  NewExerciseArithmeticState _generateAdditionExercise(int hiddenOperand, int maxOperandValue) {
+    var operand1 = Operand(random.nextInt(maxOperandValue + 1), isVisible: hiddenOperand != 0);
+    var operand2 = Operand(random.nextInt(maxOperandValue + 1), isVisible: hiddenOperand != 1);
     var result = Operand(operand1 + operand2, isVisible: hiddenOperand != 2);
     return NewExerciseArithmeticState(
         operand1, operand2, ArithmeticOperation.addition, result);
   }
 
-  NewExerciseArithmeticState _generateSubtractionExercise(int hiddenOperand) {
-    var first = random.nextInt(31);
-    var second = random.nextInt(31);
+  NewExerciseArithmeticState _generateSubtractionExercise(int hiddenOperand, int maxOperandValue) {
+    var first = random.nextInt(maxOperandValue + 1);
+    var second = random.nextInt(maxOperandValue + 1);
     var operand1 = Operand(max(first, second), isVisible: hiddenOperand != 0);
     var operand2 = Operand(min(first, second), isVisible: hiddenOperand != 1);
     var result = Operand(operand1 - operand2, isVisible: hiddenOperand != 2);
