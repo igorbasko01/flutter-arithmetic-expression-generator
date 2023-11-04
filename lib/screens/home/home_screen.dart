@@ -14,25 +14,25 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   ArithmeticOperation selectedOperation = ArithmeticOperation.addition;
+  bool hideResultOnly = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Arithmetic Exercise Generator'),
-      ),
-      body: BlocBuilder<ArithmeticBloc, ArithmeticState>(
-        builder: (blocContext, state) {
-          if (state is InitialArithmeticState) {
-            return _view('Welcome to the Arithmetic Exercise Generator!');
-          } else if (state is NewExerciseArithmeticState) {
-            return _view(state.asArithmeticString());
-          } else {
-            return Container();
-          }
-        },
-      )
-    );
+        appBar: AppBar(
+          title: const Text('Arithmetic Exercise Generator'),
+        ),
+        body: BlocBuilder<ArithmeticBloc, ArithmeticState>(
+          builder: (blocContext, state) {
+            if (state is InitialArithmeticState) {
+              return _view('Welcome to the Arithmetic Exercise Generator!');
+            } else if (state is NewExerciseArithmeticState) {
+              return _view(state.asArithmeticString());
+            } else {
+              return Container();
+            }
+          },
+        ));
   }
 
   String _getOperationText(ArithmeticOperation operation) {
@@ -51,17 +51,25 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget _view(String text) {
-    return Column(
-        children: [
-          Text(text),
-          _operationDropDown(),
-          ElevatedButton(
-              onPressed: () {
-                context.read<ArithmeticBloc>().add(
-                    GenerateNewExerciseArithmeticEvent(selectedOperation));
-              }, child: const Text('Generate Exercise')),
-        ]
-    );
+    return Column(children: [
+      Text(text),
+      _operationDropDown(),
+      ElevatedButton(
+          onPressed: () {
+            context.read<ArithmeticBloc>().add(
+                GenerateNewExerciseArithmeticEvent(selectedOperation,
+                    hideResultOnly: hideResultOnly));
+          },
+          child: const Text('Generate Exercise')),
+      CheckboxListTile(
+          title: const Text('Hide result only'),
+          value: hideResultOnly,
+          onChanged: (bool? value) {
+            setState(() {
+              hideResultOnly = value!;
+            });
+          })
+    ]);
   }
 
   DropdownButton<ArithmeticOperation> _operationDropDown() {
@@ -69,14 +77,12 @@ class _MyHomePageState extends State<MyHomePage> {
         value: selectedOperation,
         items: ArithmeticOperation.values.map((ArithmeticOperation operation) {
           return DropdownMenuItem<ArithmeticOperation>(
-              value: operation,
-              child: Text(_getOperationText(operation)));
+              value: operation, child: Text(_getOperationText(operation)));
         }).toList(),
         onChanged: (ArithmeticOperation? operation) {
           setState(() {
             selectedOperation = operation!;
           });
-        }
-    );
+        });
   }
 }
