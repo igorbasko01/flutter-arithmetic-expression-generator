@@ -110,16 +110,19 @@ class _MyHomePageState extends State<MyHomePage> {
         maintainSize: true,
         maintainAnimation: true,
         maintainState: true,
-        child: Slider(
-            value: maxOperandValue.toDouble(),
-            min: 0,
-            max: 1000,
-            divisions: 200,
-            label: 'Max operand value: $maxOperandValue',
-            onChanged: (double value) {
-              setState(() {
-                maxOperandValue = value.toInt();
-              });
-            }));
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text('Max operand value: $maxOperandValue'),
+          Slider(
+              value: maxOperandValue.toDouble(),
+              min: 0,
+              max: 1000,
+              divisions: 200,
+              label: '$maxOperandValue',
+              onChanged: (double value) {
+                setState(() {
+                  maxOperandValue = value.toInt();
+                });
+              })
+        ]));
   }
 }
