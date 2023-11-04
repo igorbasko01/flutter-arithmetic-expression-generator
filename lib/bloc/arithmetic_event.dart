@@ -6,7 +6,8 @@ class GenerateNewExerciseArithmeticEvent extends ArithmeticEvent {
   final ArithmeticOperation operation;
   final bool hideResultOnly;
   final int maxOperandValue;
+  final int numberOfExercises;
 
   GenerateNewExerciseArithmeticEvent(this.operation,
-      {this.hideResultOnly = false, this.maxOperandValue = 30});
+      {this.hideResultOnly = false, this.maxOperandValue = 30, this.numberOfExercises = 1});
 }

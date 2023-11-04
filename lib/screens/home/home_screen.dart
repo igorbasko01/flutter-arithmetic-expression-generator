@@ -29,7 +29,9 @@ class _MyHomePageState extends State<MyHomePage> {
             if (state is InitialArithmeticState) {
               return _view('Welcome to the Arithmetic Exercise Generator!');
             } else if (state is NewExerciseArithmeticState) {
-              return _view(state.asArithmeticString());
+              return _view(state.exercises
+                  .map((e) => e.asArithmeticString())
+                  .join('\n'));
             } else {
               return Container();
             }
@@ -88,7 +90,8 @@ class _MyHomePageState extends State<MyHomePage> {
           context.read<ArithmeticBloc>().add(GenerateNewExerciseArithmeticEvent(
               selectedOperation,
               hideResultOnly: hideResultOnly,
-              maxOperandValue: maxOperandValue));
+              maxOperandValue: maxOperandValue,
+              numberOfExercises: 3));
         },
         child: const Text('Generate Exercise'));
   }
