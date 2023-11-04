@@ -17,6 +17,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool showMaxOperandValueSlider = true;
   bool hideResultOnly = false;
   int maxOperandValue = 30;
+  int numberOfExercises = 3;
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _operationDropDown(),
       _generateExerciseButton(),
       _hideResultOnlyCheckbox(),
+      _numberOfExercisesSlider(),
       _maxOperandValueSlider(),
     ]);
   }
@@ -91,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
               selectedOperation,
               hideResultOnly: hideResultOnly,
               maxOperandValue: maxOperandValue,
-              numberOfExercises: 3));
+              numberOfExercises: numberOfExercises));
         },
         child: const Text('Generate Exercise'));
   }
@@ -127,5 +129,22 @@ class _MyHomePageState extends State<MyHomePage> {
                 });
               })
         ]));
+  }
+
+  Column _numberOfExercisesSlider() {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text('Number of exercises: $numberOfExercises'),
+      Slider(
+          value: numberOfExercises.toDouble(),
+          min: 1,
+          max: 10,
+          divisions: 9,
+          label: '$numberOfExercises',
+          onChanged: (double value) {
+            setState(() {
+              numberOfExercises = value.toInt();
+            });
+          })
+    ]);
   }
 }
