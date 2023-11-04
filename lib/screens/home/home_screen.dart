@@ -54,21 +54,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return Column(children: [
       Text(text),
       _operationDropDown(),
-      ElevatedButton(
-          onPressed: () {
-            context.read<ArithmeticBloc>().add(
-                GenerateNewExerciseArithmeticEvent(selectedOperation,
-                    hideResultOnly: hideResultOnly));
-          },
-          child: const Text('Generate Exercise')),
-      CheckboxListTile(
-          title: const Text('Hide result only'),
-          value: hideResultOnly,
-          onChanged: (bool? value) {
-            setState(() {
-              hideResultOnly = value!;
-            });
-          })
+      _generateExerciseButton(),
+      _hideResultOnlyCheckbox(),
     ]);
   }
 
@@ -82,6 +69,27 @@ class _MyHomePageState extends State<MyHomePage> {
         onChanged: (ArithmeticOperation? operation) {
           setState(() {
             selectedOperation = operation!;
+          });
+        });
+  }
+
+  ElevatedButton _generateExerciseButton() {
+    return ElevatedButton(
+        onPressed: () {
+          context.read<ArithmeticBloc>().add(
+              GenerateNewExerciseArithmeticEvent(selectedOperation,
+                  hideResultOnly: hideResultOnly));
+        },
+        child: const Text('Generate Exercise'));
+  }
+
+  CheckboxListTile _hideResultOnlyCheckbox() {
+    return CheckboxListTile(
+        title: const Text('Hide result only'),
+        value: hideResultOnly,
+        onChanged: (bool? value) {
+          setState(() {
+            hideResultOnly = value!;
           });
         });
   }
