@@ -4,7 +4,7 @@ import 'package:arithmetic_expressions_generator/bloc/arithmetic_bloc.dart';
 import 'package:arithmetic_expressions_generator/bloc/arithmetic_event.dart';
 import 'package:arithmetic_expressions_generator/bloc/arithmetic_state.dart';
 import 'package:arithmetic_expressions_generator/models/arithmetic_operation.dart';
-import 'package:arithmetic_expressions_generator/screens/home/home_screen.dart';
+import 'package:arithmetic_expressions_generator/screens/home/arithemetic_exercise_generator_page.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -35,7 +35,7 @@ void main() {
     await tester.pumpWidget(MaterialApp(
       home: BlocProvider<ArithmeticBloc>.value(
         value: mockArithmeticBloc!,
-        child: const MyHomePage(),
+        child: const ArithmeticExerciseGeneratorPage(),
       ),
     ));
 

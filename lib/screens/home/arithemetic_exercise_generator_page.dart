@@ -5,14 +5,16 @@ import 'package:arithmetic_expressions_generator/models/arithmetic_operation.dar
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class ArithmeticExerciseGeneratorPage extends StatefulWidget {
+  const ArithmeticExerciseGeneratorPage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<ArithmeticExerciseGeneratorPage> createState() =>
+      _ArithmeticExerciseGeneratorPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _ArithmeticExerciseGeneratorPageState
+    extends State<ArithmeticExerciseGeneratorPage> {
   ArithmeticOperation selectedOperation = ArithmeticOperation.addition;
   bool showMaxOperandValueSlider = true;
   bool hideResultOnly = false;
@@ -25,19 +27,21 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: const Text('Arithmetic Exercise Generator'),
         ),
-        body: BlocBuilder<ArithmeticBloc, ArithmeticState>(
-          builder: (blocContext, state) {
-            if (state is InitialArithmeticState) {
-              return _view('Welcome to the Arithmetic Exercise Generator!');
-            } else if (state is NewExerciseArithmeticState) {
-              return _view(state.exercises
-                  .map((e) => e.asArithmeticString())
-                  .join('\n'));
-            } else {
-              return Container();
-            }
-          },
-        ));
+        body: BlocProvider<ArithmeticBloc>(
+            create: (context) => ArithmeticBloc(),
+            child: BlocBuilder<ArithmeticBloc, ArithmeticState>(
+              builder: (blocContext, state) {
+                if (state is InitialArithmeticState) {
+                  return _view('Welcome to the Arithmetic Exercise Generator!', blocContext);
+                } else if (state is NewExerciseArithmeticState) {
+                  return _view(state.exercises
+                      .map((e) => e.asArithmeticString())
+                      .join('\n'), blocContext);
+                } else {
+                  return Container();
+                }
+              },
+            )));
   }
 
   String _getOperationText(ArithmeticOperation operation) {
@@ -55,11 +59,11 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Widget _view(String text) {
+  Widget _view(String text, BuildContext blocContext) {
     return Column(children: [
       Text(text),
       _operationDropDown(),
-      _generateExerciseButton(),
+      _generateExerciseButton(blocContext),
       _hideResultOnlyCheckbox(),
       _numberOfExercisesSlider(),
       _maxOperandValueSlider(),
@@ -86,10 +90,10 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
-  ElevatedButton _generateExerciseButton() {
+  ElevatedButton _generateExerciseButton(BuildContext blocContext) {
     return ElevatedButton(
         onPressed: () {
-          context.read<ArithmeticBloc>().add(GenerateNewExerciseArithmeticEvent(
+          blocContext.read<ArithmeticBloc>().add(GenerateNewExerciseArithmeticEvent(
               selectedOperation,
               hideResultOnly: hideResultOnly,
               maxOperandValue: maxOperandValue,
