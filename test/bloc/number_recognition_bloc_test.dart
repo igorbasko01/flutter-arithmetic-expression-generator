@@ -5,14 +5,33 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  blocTest('Returns new Number Recognition Exercise',
-  build: () => NumberRecognitionBloc(),
-  act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
-  expect: () => [
-    predicate<ExerciseNumberRecognitionState>((state) {
-      return state.objectType == NumberRecognitionObjectType.circle &&
-      state.numberOfObjects == 3 &&
-      state.possibleAnswers.difference({1, 2, 3}).isEmpty;  // checks that the sets contain the same elements.
-    })
-  ]);
+  blocTest('Returns new Number Recognition Exercise of circles',
+      build: () => NumberRecognitionBloc(),
+      act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
+      expect: () => [
+            predicate<ExerciseNumberRecognitionState>((state) {
+              return state.objectType == NumberRecognitionObjectType.circle &&
+                  state.numberOfObjects == 3 &&
+                  state.possibleAnswers.difference({
+                    1,
+                    2,
+                    3
+                  }).isEmpty; // checks that the sets contain the same elements.
+            })
+          ]);
+
+  blocTest('Returns new Number Recognition Exercise of squares',
+      build: () => NumberRecognitionBloc(),
+      act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
+      expect: () => [
+            predicate<ExerciseNumberRecognitionState>((state) {
+              return state.objectType == NumberRecognitionObjectType.square &&
+                  state.numberOfObjects == 3 &&
+                  state.possibleAnswers.difference({
+                    1,
+                    2,
+                    3
+                  }).isEmpty; // checks that the sets contain the same elements.
+            })
+          ]);
 }
