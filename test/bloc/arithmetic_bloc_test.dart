@@ -3,12 +3,10 @@ import 'package:arithmetic_expressions_generator/bloc/arithmetic_event.dart';
 import 'package:arithmetic_expressions_generator/bloc/arithmetic_state.dart';
 import 'package:arithmetic_expressions_generator/models/arithmetic_operation.dart';
 import 'package:arithmetic_expressions_generator/models/exercise.dart';
-import 'package:arithmetic_expressions_generator/utils/random_number_generator.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 
-class MockRandom extends Mock implements RandomNumberGenerator {}
+import 'random_test_helper.dart';
 
 int _numberOfHiddenOperands(Exercise exercise) {
   var visibleOperands = [
@@ -19,18 +17,12 @@ int _numberOfHiddenOperands(Exercise exercise) {
   return visibleOperands.where((element) => !element).length;
 }
 
-void _mockRandomNumberGenerator(MockRandom mockRandom, List<int> answers) {
-  var callCount = 0;
-  when(() => mockRandom.nextInt(any()))
-      .thenAnswer((_) => answers[callCount++]);
-}
-
 void main() {
   blocTest<ArithmeticBloc, ArithmeticState>(
       'Returns a new exercise state for addition event',
       build: () {
         final mockRandom = MockRandom();
-        _mockRandomNumberGenerator(mockRandom, [2, 1, 2]);
+        mockRandomNumberGenerator(mockRandom, [2, 1, 2]);
         return ArithmeticBloc(randomGenerator: mockRandom);
       },
       act: (bloc) {
@@ -68,7 +60,7 @@ void main() {
   blocTest('Subtraction puts the larger operand first',
       build: () {
         final mockRandom = MockRandom();
-        _mockRandomNumberGenerator(mockRandom, [2, 1, 2]);
+        mockRandomNumberGenerator(mockRandom, [2, 1, 2]);
         return ArithmeticBloc(randomGenerator: mockRandom);
       },
       act: (bloc) => bloc.add(
@@ -121,7 +113,7 @@ void main() {
   blocTest('Division puts the larger operand first',
       build: () {
         final mockRandom = MockRandom();
-        _mockRandomNumberGenerator(mockRandom, [2, 1, 2]);
+        mockRandomNumberGenerator(mockRandom, [2, 1, 2]);
         return ArithmeticBloc(randomGenerator: mockRandom);
       },
       act: (bloc) => bloc.add(
@@ -143,7 +135,7 @@ void main() {
   blocTest('Returns new exercise where the result is hidden',
       build: () {
         final mockRandom = MockRandom();
-        _mockRandomNumberGenerator(mockRandom, [0, 1, 2]);
+        mockRandomNumberGenerator(mockRandom, [0, 1, 2]);
         return ArithmeticBloc(randomGenerator: mockRandom);
       },
       act: (bloc) => bloc.add(GenerateNewExerciseArithmeticEvent(
