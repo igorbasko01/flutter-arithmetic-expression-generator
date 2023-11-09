@@ -19,8 +19,9 @@ class NumberRecognitionBloc
       Emitter<NumberRecognitionState> emit) {
     var objectType = NumberRecognitionObjectType
         .values[random.nextInt(NumberRecognitionObjectType.values.length)];
+    var numberOfObjects = random.nextInt(event.maxNumber) + 1;
 
     emit(ExerciseNumberRecognitionState(
-        objectType, 3, {1, 2, 3}));
+        objectType, numberOfObjects, {1, 2, 3}));
   }
 }
