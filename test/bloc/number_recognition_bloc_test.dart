@@ -10,58 +10,76 @@ void main() {
   blocTest('Returns new Number Recognition Exercise of circles',
       build: () {
         final mockRandom = MockRandom();
-        mockRandomNumberGenerator(mockRandom, [1, 2]);
+        mockRandomNumberGenerator(mockRandom, [1, 2, 0]);
         return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
       },
       act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
       expect: () => [
-            predicate<ExerciseNumberRecognitionState>((state) {
-              return state.objectType == NumberRecognitionObjectType.circle &&
-                  state.numberOfObjects == 3 &&
-                  state.possibleAnswers.difference({
-                    1,
-                    2,
-                    3
-                  }).isEmpty; // checks that the sets contain the same elements.
-            })
+            isA<ExerciseNumberRecognitionState>().having(
+                (state) => state.objectType,
+                'object type',
+                NumberRecognitionObjectType.circle),
           ]);
 
   blocTest('Returns new Number Recognition Exercise of squares',
       build: () {
         final mockRandom = MockRandom();
-        mockRandomNumberGenerator(mockRandom, [0, 2]);
+        mockRandomNumberGenerator(mockRandom, [0, 2, 0]);
         return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
       },
       act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
       expect: () => [
-            predicate<ExerciseNumberRecognitionState>((state) {
-              return state.objectType == NumberRecognitionObjectType.square &&
-                  state.numberOfObjects == 3 &&
-                  state.possibleAnswers.difference({
-                    1,
-                    2,
-                    3
-                  }).isEmpty; // checks that the sets contain the same elements.
-            })
+            isA<ExerciseNumberRecognitionState>().having(
+                (state) => state.objectType,
+                'object type',
+                NumberRecognitionObjectType.square),
           ]);
 
   blocTest('Generates a random number of objects',
+      build: () {
+        final mockRandom = MockRandom();
+        mockRandomNumberGenerator(mockRandom, [0, 1, 0]);
+        return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
+      },
+      act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
+      expect: () => [
+            isA<ExerciseNumberRecognitionState>().having(
+                (state) => state.numberOfObjects, 'number of objects', 2),
+          ]);
+
+  blocTest('Returns the correct answer in first answer',
+      build: () {
+        final mockRandom = MockRandom();
+        mockRandomNumberGenerator(mockRandom, [0, 1, 0]);
+        return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
+      },
+      act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
+      expect: () => [
+            isA<ExerciseNumberRecognitionState>()
+                .having((state) => state.possibleAnswers[0], 'first answer', 2),
+          ]);
+
+  blocTest('Returns the correct answer in second answer',
     build: () {
       final mockRandom = MockRandom();
-      mockRandomNumberGenerator(mockRandom, [0, 1]);
+      mockRandomNumberGenerator(mockRandom, [0, 1, 1]);
       return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
     },
     act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
     expect: () => [
-      predicate<ExerciseNumberRecognitionState>((state) {
-        return state.objectType == NumberRecognitionObjectType.square &&
-            state.numberOfObjects == 2 &&
-            state.possibleAnswers.difference({
-              1,
-              2,
-              3
-            }).isEmpty; // checks that the sets contain the same elements.
-      })
-    ]
-  );
+      isA<ExerciseNumberRecognitionState>()
+        .having((state) => state.possibleAnswers[1], 'second answer', 2),
+    ]);
+
+  blocTest('Returns the correct answer in third answer',
+    build: () {
+      final mockRandom = MockRandom();
+      mockRandomNumberGenerator(mockRandom, [0, 1, 2]);
+      return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
+    },
+    act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
+    expect: () => [
+      isA<ExerciseNumberRecognitionState>()
+        .having((state) => state.possibleAnswers[2], 'third answer', 2),
+    ]);
 }

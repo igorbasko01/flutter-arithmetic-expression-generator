@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class NumberRecognitionBloc
     extends Bloc<NumberRecognitionEvent, NumberRecognitionState> {
   final RandomNumberGenerator random;
+  final int maxAnswers = 3;
 
   NumberRecognitionBloc({RandomNumberGenerator? randomNumberGenerator})
       : random = randomNumberGenerator ?? DefaultRandomNumberGenerator(),
@@ -20,8 +21,11 @@ class NumberRecognitionBloc
     var objectType = NumberRecognitionObjectType
         .values[random.nextInt(NumberRecognitionObjectType.values.length)];
     var numberOfObjects = random.nextInt(event.maxNumber) + 1;
+    var rightAnswerPlace = random.nextInt(maxAnswers);
+    var answers = [1, 2, 3];
+    answers[rightAnswerPlace] = numberOfObjects;
 
     emit(ExerciseNumberRecognitionState(
-        objectType, numberOfObjects, {1, 2, 3}));
+        objectType, numberOfObjects, answers));
   }
 }
