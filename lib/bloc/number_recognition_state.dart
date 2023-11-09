@@ -21,5 +21,4 @@ class AnswerNumberRecognitionState extends NumberRecognitionState {
 enum NumberRecognitionObjectType {
   square,
   circle,
-  triangle,
 }
