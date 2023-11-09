@@ -22,8 +22,14 @@ class NumberRecognitionBloc
         .values[random.nextInt(NumberRecognitionObjectType.values.length)];
     var numberOfObjects = random.nextInt(event.maxNumber) + 1;
     var rightAnswerPlace = random.nextInt(maxAnswers);
-    var answers = [1, 2, 3];
+    var otherAnswers = [numberOfObjects-1, numberOfObjects+1];
+    var answers = List<int>.filled(maxAnswers, 0);
     answers[rightAnswerPlace] = numberOfObjects;
+    for (var i = 0; i < maxAnswers; i++) {
+      if (i != rightAnswerPlace) {
+        answers[i] = otherAnswers.removeAt(0);
+      }
+    }
 
     emit(ExerciseNumberRecognitionState(
         objectType, numberOfObjects, answers));
