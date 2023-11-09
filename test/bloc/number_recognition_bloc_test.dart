@@ -4,9 +4,15 @@ import 'package:arithmetic_expressions_generator/bloc/number_recognition_state.d
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'random_test_helper.dart';
+
 void main() {
   blocTest('Returns new Number Recognition Exercise of circles',
-      build: () => NumberRecognitionBloc(),
+      build: () {
+        final mockRandom = MockRandom();
+        mockRandomNumberGenerator(mockRandom, [1]);
+        return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
+      },
       act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
       expect: () => [
             predicate<ExerciseNumberRecognitionState>((state) {
@@ -21,7 +27,11 @@ void main() {
           ]);
 
   blocTest('Returns new Number Recognition Exercise of squares',
-      build: () => NumberRecognitionBloc(),
+      build: () {
+        final mockRandom = MockRandom();
+        mockRandomNumberGenerator(mockRandom, [0]);
+        return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
+      },
       act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
       expect: () => [
             predicate<ExerciseNumberRecognitionState>((state) {
