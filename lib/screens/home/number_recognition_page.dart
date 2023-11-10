@@ -46,7 +46,10 @@ class _NumberRecognitionPageState extends State<NumberRecognitionPage> {
   Widget _drawExercise(
       ExerciseNumberRecognitionState state, BuildContext blocContext) {
     return Column(children: [
-      Text('Number of objects is: ${state.numberOfObjects.toString()}'),
+      if (state.objectType == NumberRecognitionObjectType.circle)
+        _drawObjects(state.numberOfObjects, _drawCircle)
+      else
+        _drawObjects(state.numberOfObjects, _drawSquare),
       const Divider(color: Colors.grey, thickness: 1),
       Row(
           children: state.possibleAnswers
@@ -54,5 +57,36 @@ class _NumberRecognitionPageState extends State<NumberRecognitionPage> {
                   ElevatedButton(onPressed: () {}, child: Text(e.toString())))
               .toList()),
     ]);
+  }
+
+  Widget _drawObjects(int numberOfObjects, Function drawObject) {
+    return Row(
+        children: List.generate(numberOfObjects * 2 - 1, (index) {
+      if (index % 2 == 0) {
+        return drawObject();
+      } else {
+        return const SizedBox(width: 10);
+      }
+    }));
+  }
+
+  Widget _drawCircle() {
+    return Container(
+        width: 50,
+        height: 50,
+        decoration: const BoxDecoration(
+          color: Colors.blue,
+          shape: BoxShape.circle,
+        ));
+  }
+
+  Widget _drawSquare() {
+    return Container(
+        width: 50,
+        height: 50,
+        decoration: const BoxDecoration(
+          color: Colors.blue,
+          shape: BoxShape.rectangle,
+        ));
   }
 }
