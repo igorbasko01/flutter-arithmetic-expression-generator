@@ -60,62 +60,95 @@ void main() {
           ]);
 
   blocTest('Returns the correct answer in second answer',
-    build: () {
-      final mockRandom = MockRandom();
-      mockRandomNumberGenerator(mockRandom, [0, 1, 1]);
-      return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
-    },
-    act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
-    expect: () => [
-      isA<ExerciseNumberRecognitionState>()
-        .having((state) => state.possibleAnswers[1], 'second answer', 2),
-    ]);
+      build: () {
+        final mockRandom = MockRandom();
+        mockRandomNumberGenerator(mockRandom, [0, 1, 1]);
+        return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
+      },
+      act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
+      expect: () => [
+            isA<ExerciseNumberRecognitionState>().having(
+                (state) => state.possibleAnswers[1], 'second answer', 2),
+          ]);
 
   blocTest('Returns the correct answer in third answer',
-    build: () {
-      final mockRandom = MockRandom();
-      mockRandomNumberGenerator(mockRandom, [0, 1, 2]);
-      return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
-    },
-    act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
-    expect: () => [
-      isA<ExerciseNumberRecognitionState>()
-        .having((state) => state.possibleAnswers[2], 'third answer', 2),
-    ]);
+      build: () {
+        final mockRandom = MockRandom();
+        mockRandomNumberGenerator(mockRandom, [0, 1, 2]);
+        return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
+      },
+      act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
+      expect: () => [
+            isA<ExerciseNumberRecognitionState>()
+                .having((state) => state.possibleAnswers[2], 'third answer', 2),
+          ]);
 
   blocTest('Possible answers should be a close number to the right answer',
-    build: () {
-      final mockRandom = MockRandom();
-      mockRandomNumberGenerator(mockRandom, [0, 1, 0]);
-      return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
-    },
-    act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
-    expect: () => [
-      isA<ExerciseNumberRecognitionState>()
-        .having((state) => state.possibleAnswers, 'answers', [2, 1, 3]),
-    ]);
+      build: () {
+        final mockRandom = MockRandom();
+        mockRandomNumberGenerator(mockRandom, [0, 1, 0]);
+        return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
+      },
+      act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
+      expect: () => [
+            isA<ExerciseNumberRecognitionState>()
+                .having((state) => state.possibleAnswers, 'answers', [2, 1, 3]),
+          ]);
 
   blocTest('Possible answers should be a close number to the right answer',
-    build: () {
-      final mockRandom = MockRandom();
-      mockRandomNumberGenerator(mockRandom, [0, 1, 1]);
-      return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
-    },
-    act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
-    expect: () => [
-      isA<ExerciseNumberRecognitionState>()
-        .having((state) => state.possibleAnswers, 'answers', [1, 2, 3]),
-    ]);
+      build: () {
+        final mockRandom = MockRandom();
+        mockRandomNumberGenerator(mockRandom, [0, 1, 1]);
+        return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
+      },
+      act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
+      expect: () => [
+            isA<ExerciseNumberRecognitionState>()
+                .having((state) => state.possibleAnswers, 'answers', [1, 2, 3]),
+          ]);
 
   blocTest('Possible answers should be a close number to the right answer',
-    build: () {
-      final mockRandom = MockRandom();
-      mockRandomNumberGenerator(mockRandom, [0, 1, 2]);
-      return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
-    },
-    act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
+      build: () {
+        final mockRandom = MockRandom();
+        mockRandomNumberGenerator(mockRandom, [0, 1, 2]);
+        return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
+      },
+      act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
+      expect: () => [
+            isA<ExerciseNumberRecognitionState>()
+                .having((state) => state.possibleAnswers, 'answers', [1, 3, 2]),
+          ]);
+
+  blocTest('On correct answer return state isCorrect true',
+      build: () => NumberRecognitionBloc(),
+      act: (bloc) => bloc.add(CheckAnswerNumberRecognitionEvent(2, 2)),
+      expect: () => [
+            isA<AnswerNumberRecognitionState>()
+                .having((state) => state.isCorrect, 'isCorrect', true)
+          ]);
+
+  blocTest('On correct answer return state correctAnswer as answer',
+      build: () => NumberRecognitionBloc(),
+      act: (bloc) => bloc.add(CheckAnswerNumberRecognitionEvent(2, 2)),
+      expect: () => [
+            isA<AnswerNumberRecognitionState>()
+                .having((state) => state.correctAnswer, 'correctAnswer', 2)
+          ]);
+
+  blocTest('On wrong answer return state isCorrect false',
+      build: () => NumberRecognitionBloc(),
+      act: (bloc) => bloc.add(CheckAnswerNumberRecognitionEvent(2, 3)),
+      expect: () => [
+            isA<AnswerNumberRecognitionState>()
+                .having((state) => state.isCorrect, 'isCorrect', false)
+          ]);
+
+  blocTest('On wrong answer return state correctAnswer as correct answer',
+      build: () => NumberRecognitionBloc(),
+    act: (bloc) => bloc.add(CheckAnswerNumberRecognitionEvent(2, 3)),
     expect: () => [
-      isA<ExerciseNumberRecognitionState>()
-        .having((state) => state.possibleAnswers, 'answers', [1, 3, 2]),
-    ]);
+          isA<AnswerNumberRecognitionState>()
+              .having((state) => state.correctAnswer, 'correctAnswer', 2)
+        ]
+  );
 }
