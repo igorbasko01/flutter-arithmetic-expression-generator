@@ -29,6 +29,8 @@ class _NumberRecognitionPageState extends State<NumberRecognitionPage> {
                 'Welcome to the Number Recognition!', blocContext);
           } else if (state is ExerciseNumberRecognitionState) {
             return _drawExercise(state, blocContext);
+          } else if (state is AnswerNumberRecognitionState) {
+            return _drawAnswer(state, blocContext);
           } else {
             return Container();
           }
@@ -53,14 +55,19 @@ class _NumberRecognitionPageState extends State<NumberRecognitionPage> {
       const Divider(color: Colors.grey, thickness: 1),
       Row(
           children: state.possibleAnswers
-              .map((e) =>
-                  ElevatedButton(onPressed: () {}, child: Text(e.toString())))
+              .map((e) => ElevatedButton(
+                  onPressed: () {
+                    blocContext.read<NumberRecognitionBloc>().add(
+                        CheckAnswerNumberRecognitionEvent(
+                            state.numberOfObjects, e));
+                  },
+                  child: Text(e.toString())))
               .toList()),
     ]);
   }
 
   Widget _drawObjects(int numberOfObjects, Function drawObject) {
-    return Row(
+    return Wrap(
         children: List.generate(numberOfObjects * 2 - 1, (index) {
       if (index % 2 == 0) {
         return drawObject();
@@ -87,6 +94,43 @@ class _NumberRecognitionPageState extends State<NumberRecognitionPage> {
         decoration: const BoxDecoration(
           color: Colors.blue,
           shape: BoxShape.rectangle,
+        ));
+  }
+
+  Widget _drawAnswer(
+      AnswerNumberRecognitionState state, BuildContext blocContext) {
+    return Column(children: [
+      Text(state.isCorrect ? 'Correct!' : 'Wrong!'),
+      state.isCorrect ? _drawHappyFace() : _drawSadFace(),
+      state.isCorrect ? Container() : _drawObjects(state.correctAnswer, _drawSquare),
+      const Text('The correct answer is '),
+      Text(state.correctAnswer.toString(),
+          style: const TextStyle(fontSize: 30)),
+      ElevatedButton(
+          onPressed: () => blocContext
+              .read<NumberRecognitionBloc>()
+              .add(GenerateNewExerciseNumberRecognitionEvent(maxNumber: 10)),
+          child: const Text('Next')),
+    ]);
+  }
+
+  Widget _drawHappyFace() {
+    return Container(
+        width: 50,
+        height: 50,
+        decoration: const BoxDecoration(
+          color: Colors.green,
+          shape: BoxShape.circle,
+        ));
+  }
+
+  Widget _drawSadFace() {
+    return Container(
+        width: 50,
+        height: 50,
+        decoration: const BoxDecoration(
+          color: Colors.red,
+          shape: BoxShape.circle,
         ));
   }
 }

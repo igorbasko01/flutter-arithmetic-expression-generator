@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:arithmetic_expressions_generator/bloc/number_recognition_event.dart';
 import 'package:arithmetic_expressions_generator/bloc/number_recognition_state.dart';
 import 'package:arithmetic_expressions_generator/utils/random_number_generator.dart';
@@ -13,6 +15,7 @@ class NumberRecognitionBloc
         super(InitialNumberRecognitionState()) {
     on<GenerateNewExerciseNumberRecognitionEvent>(
         _onGenerateNewExerciseNumberRecognitionEvent);
+    on<CheckAnswerNumberRecognitionEvent>(_onCheckAnswerNumberRecognitionEvent);
   }
 
   void _onGenerateNewExerciseNumberRecognitionEvent(
@@ -22,7 +25,7 @@ class NumberRecognitionBloc
         .values[random.nextInt(NumberRecognitionObjectType.values.length)];
     var numberOfObjects = random.nextInt(event.maxNumber) + 1;
     var rightAnswerPlace = random.nextInt(maxAnswers);
-    var otherAnswers = [numberOfObjects-1, numberOfObjects+1];
+    var otherAnswers = [numberOfObjects - 1, numberOfObjects + 1];
     var answers = List<int>.filled(maxAnswers, 0);
     answers[rightAnswerPlace] = numberOfObjects;
     for (var i = 0; i < maxAnswers; i++) {
@@ -31,7 +34,10 @@ class NumberRecognitionBloc
       }
     }
 
-    emit(ExerciseNumberRecognitionState(
-        objectType, numberOfObjects, answers));
+    emit(ExerciseNumberRecognitionState(objectType, numberOfObjects, answers));
+  }
+
+  void _onCheckAnswerNumberRecognitionEvent(CheckAnswerNumberRecognitionEvent event, Emitter<NumberRecognitionState> emit) {
+    emit(AnswerNumberRecognitionState(event.answer == event.numberOfObjects, event.numberOfObjects));
   }
 }
