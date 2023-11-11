@@ -67,7 +67,7 @@ class _NumberRecognitionPageState extends State<NumberRecognitionPage> {
   }
 
   Widget _drawObjects(int numberOfObjects, Function drawObject) {
-    return Row(
+    return Wrap(
         children: List.generate(numberOfObjects * 2 - 1, (index) {
       if (index % 2 == 0) {
         return drawObject();
