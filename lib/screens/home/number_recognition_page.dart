@@ -68,13 +68,9 @@ class _NumberRecognitionPageState extends State<NumberRecognitionPage> {
 
   Widget _drawObjects(int numberOfObjects, Function drawObject) {
     return Wrap(
-        children: List.generate(numberOfObjects * 2 - 1, (index) {
-      if (index % 2 == 0) {
-        return drawObject();
-      } else {
-        return const SizedBox(width: 10);
-      }
-    }));
+        spacing: 8.0,
+        runSpacing: 4.0,
+        children: List.generate(numberOfObjects, (index) => drawObject()));
   }
 
   Widget _drawCircle() {
@@ -102,7 +98,9 @@ class _NumberRecognitionPageState extends State<NumberRecognitionPage> {
     return Column(children: [
       Text(state.isCorrect ? 'Correct!' : 'Wrong!'),
       state.isCorrect ? _drawHappyFace() : _drawSadFace(),
-      state.isCorrect ? Container() : _drawObjects(state.correctAnswer, _drawSquare),
+      state.isCorrect
+          ? Container()
+          : _drawObjects(state.correctAnswer, _drawSquare),
       const Text('The correct answer is '),
       Text(state.correctAnswer.toString(),
           style: const TextStyle(fontSize: 30)),
