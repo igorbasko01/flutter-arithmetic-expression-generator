@@ -88,7 +88,8 @@ class ArithmeticBloc extends Bloc<ArithmeticEvent, ArithmeticState> {
       var operand1 = Operand(max(first, second), isVisible: hiddenOperand != 0);
       var operand2 = Operand(min(first, second), isVisible: hiddenOperand != 1);
       var result = Operand(operand1 - operand2, isVisible: hiddenOperand != 2);
-      return Exercise(operand1, operand2, ArithmeticOperation.subtraction, result);
+      return Exercise(
+          operand1, operand2, ArithmeticOperation.subtraction, result);
     };
   }
 
@@ -101,7 +102,8 @@ class ArithmeticBloc extends Bloc<ArithmeticEvent, ArithmeticState> {
       var operand1 = Operand(random.nextInt(11), isVisible: hiddenOperand != 0);
       var operand2 = Operand(random.nextInt(6), isVisible: hiddenOperand != 1);
       var result = Operand(operand1 * operand2, isVisible: hiddenOperand != 2);
-      return Exercise(operand1, operand2, ArithmeticOperation.multiplication, result);
+      return Exercise(
+          operand1, operand2, ArithmeticOperation.multiplication, result);
     };
   }
 
@@ -120,11 +122,17 @@ class ArithmeticBloc extends Bloc<ArithmeticEvent, ArithmeticState> {
     };
   }
 
-  void _onCheckAnswerArithmeticEvent(CheckAnswerArithmeticEvent event, Emitter<ArithmeticState> emit) {
+  void _onCheckAnswerArithmeticEvent(
+      CheckAnswerArithmeticEvent event, Emitter<ArithmeticState> emit) {
+    var exerciseWithVisibleResult = Exercise(
+        event.exercise.operand1,
+        event.exercise.operand2,
+        event.exercise.operator,
+        Operand(event.exercise.result.value, isVisible: true));
     if (event.exercise.result.value == event.answer) {
-      emit(AnswerCheckArithmeticState(true, event.exercise));
+      emit(AnswerCheckArithmeticState(true, exerciseWithVisibleResult));
     } else {
-      emit(AnswerCheckArithmeticState(false, event.exercise));
+      emit(AnswerCheckArithmeticState(false, exerciseWithVisibleResult));
     }
   }
 }

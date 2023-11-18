@@ -203,7 +203,7 @@ void main() {
                   Operand(1, isVisible: true),
                   Operand(2, isVisible: true),
                   ArithmeticOperation.addition,
-                  Operand(3, isVisible: false));
+                  Operand(3, isVisible: true));
               return state.isCorrect && state.exercise == expectedExercise;
             })
           ]);
@@ -220,8 +220,26 @@ void main() {
                   Operand(1, isVisible: true),
                   Operand(2, isVisible: true),
                   ArithmeticOperation.addition,
-                  Operand(3, isVisible: false));
+                  Operand(3, isVisible: true));
               return !state.isCorrect && state.exercise == expectedExercise;
             })
           ]);
+
+  blocTest('Answer check event returns a result state where all operands are visible',
+      build: () => ArithmeticBloc(),
+      act: (bloc) => bloc.add(CheckAnswerArithmeticEvent(
+          Exercise(Operand(1, isVisible: true), Operand(2, isVisible: true),
+              ArithmeticOperation.addition, Operand(3, isVisible: false)),
+          3)),
+      expect: () => [
+            predicate<AnswerCheckArithmeticState>((state) {
+              var expectedExercise = Exercise(
+                  Operand(1, isVisible: true),
+                  Operand(2, isVisible: true),
+                  ArithmeticOperation.addition,
+                  Operand(3, isVisible: true));
+              return state.isCorrect && state.exercise == expectedExercise;
+            })
+          ]
+  );
 }
