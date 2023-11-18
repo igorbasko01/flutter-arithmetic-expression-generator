@@ -9,3 +9,10 @@ class NewExerciseArithmeticState extends ArithmeticState {
 
   NewExerciseArithmeticState(this.exercises);
 }
+
+class AnswerCheckArithmeticState extends ArithmeticState {
+  final bool isCorrect;
+  final Exercise exercise;
+
+  AnswerCheckArithmeticState(this.isCorrect, this.exercise);
+}
