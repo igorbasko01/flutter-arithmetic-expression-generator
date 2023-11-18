@@ -23,4 +23,21 @@ class Exercise {
         return '';
     }
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Exercise &&
+          runtimeType == other.runtimeType &&
+          operand1 == other.operand1 &&
+          operand2 == other.operand2 &&
+          operator == other.operator &&
+          result == other.result;
+
+  @override
+  int get hashCode =>
+      operand1.hashCode ^
+      operand2.hashCode ^
+      operator.hashCode ^
+      result.hashCode;
 }
