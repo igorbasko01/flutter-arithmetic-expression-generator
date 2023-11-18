@@ -207,4 +207,21 @@ void main() {
               return state.isCorrect && state.exercise == expectedExercise;
             })
           ]);
+
+  blocTest('Answer check event returns a result state with incorrect answer',
+      build: () => ArithmeticBloc(),
+      act: (bloc) => bloc.add(CheckAnswerArithmeticEvent(
+          Exercise(Operand(1, isVisible: true), Operand(2, isVisible: true),
+              ArithmeticOperation.addition, Operand(3, isVisible: false)),
+          4)),
+      expect: () => [
+            predicate<AnswerCheckArithmeticState>((state) {
+              var expectedExercise = Exercise(
+                  Operand(1, isVisible: true),
+                  Operand(2, isVisible: true),
+                  ArithmeticOperation.addition,
+                  Operand(3, isVisible: false));
+              return !state.isCorrect && state.exercise == expectedExercise;
+            })
+          ]);
 }
