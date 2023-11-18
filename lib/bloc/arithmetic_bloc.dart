@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:arithmetic_expressions_generator/bloc/arithmetic_event.dart';
@@ -16,6 +17,7 @@ class ArithmeticBloc extends Bloc<ArithmeticEvent, ArithmeticState> {
         super(InitialArithmeticState()) {
     on<GenerateNewExerciseArithmeticEvent>(
         _onGenerateNewExerciseArithmeticEvent);
+    on<CheckAnswerArithmeticEvent>(_onCheckAnswerArithmeticEvent);
   }
 
   void _onGenerateNewExerciseArithmeticEvent(
@@ -116,5 +118,13 @@ class ArithmeticBloc extends Bloc<ArithmeticEvent, ArithmeticState> {
       var result = Operand(operand1 ~/ operand2, isVisible: hiddenOperand != 2);
       return Exercise(operand1, operand2, ArithmeticOperation.division, result);
     };
+  }
+
+  void _onCheckAnswerArithmeticEvent(CheckAnswerArithmeticEvent event, Emitter<ArithmeticState> emit) {
+    if (event.exercise.result.value == event.answer) {
+      emit(AnswerCheckArithmeticState(true, event.exercise));
+    } else {
+      emit(AnswerCheckArithmeticState(false, event.exercise));
+    }
   }
 }
