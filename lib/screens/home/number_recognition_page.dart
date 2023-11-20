@@ -19,26 +19,23 @@ class _NumberRecognitionPageState extends State<NumberRecognitionPage> {
     return Scaffold(
       appBar: AppBar(title: const Text('Number Recognition')),
       bottomSheet: _settings(),
-      body: BlocProvider<NumberRecognitionBloc>(
-        create: (context) => NumberRecognitionBloc(),
-        child: BlocBuilder<NumberRecognitionBloc, NumberRecognitionState>(
-            builder: (blocContext, state) {
-              if (state is InitialNumberRecognitionState) {
-                blocContext
-                    .read<NumberRecognitionBloc>()
-                    .add(
-                    GenerateNewExerciseNumberRecognitionEvent(maxNumber: _maxObjects));
-                return _initialView(
-                    'Welcome to the Number Recognition!', blocContext);
-              } else if (state is ExerciseNumberRecognitionState) {
-                return _drawExercise(state, blocContext);
-              } else if (state is AnswerNumberRecognitionState) {
-                return _drawAnswer(state, blocContext);
-              } else {
-                return Container();
-              }
-            }),
-      ),
+      body: BlocBuilder<NumberRecognitionBloc, NumberRecognitionState>(
+          builder: (blocContext, state) {
+            if (state is InitialNumberRecognitionState) {
+              blocContext
+                  .read<NumberRecognitionBloc>()
+                  .add(
+                  GenerateNewExerciseNumberRecognitionEvent(maxNumber: _maxObjects));
+              return _initialView(
+                  'Welcome to the Number Recognition!', blocContext);
+            } else if (state is ExerciseNumberRecognitionState) {
+              return _drawExercise(state, blocContext);
+            } else if (state is AnswerNumberRecognitionState) {
+              return _drawAnswer(state, blocContext);
+            } else {
+              return Container();
+            }
+          }),
     );
   }
 

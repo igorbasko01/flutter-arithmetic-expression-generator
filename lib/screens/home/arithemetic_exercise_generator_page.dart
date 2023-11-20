@@ -20,6 +20,7 @@ class _ArithmeticExerciseGeneratorPageState
   bool hideResultOnly = false;
   int maxOperandValue = 30;
   int numberOfExercises = 3;
+  int answer = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -27,21 +28,23 @@ class _ArithmeticExerciseGeneratorPageState
         appBar: AppBar(
           title: const Text('Arithmetic Exercise Generator'),
         ),
-        body: BlocProvider<ArithmeticBloc>(
-            create: (context) => ArithmeticBloc(),
-            child: BlocBuilder<ArithmeticBloc, ArithmeticState>(
-              builder: (blocContext, state) {
-                if (state is InitialArithmeticState) {
-                  return _view('Welcome to the Arithmetic Exercise Generator!', blocContext);
-                } else if (state is NewExerciseArithmeticState) {
-                  return _view(state.exercises
-                      .map((e) => e.asArithmeticString())
-                      .join('\n'), blocContext);
-                } else {
-                  return Container();
-                }
-              },
-            )));
+        body: BlocBuilder<ArithmeticBloc, ArithmeticState>(
+          builder: (blocContext, state) {
+            if (state is InitialArithmeticState) {
+              return _view('Welcome to the Arithmetic Exercise Generator!',
+                  blocContext, null);
+            } else if (state is NewExerciseArithmeticState) {
+              return _view(
+                  state.exercises.map((e) => e.asArithmeticString()).join('\n'),
+                  blocContext,
+                  state);
+            } else if (state is AnswerCheckArithmeticState) {
+              return _answerView(state, blocContext);
+            } else {
+              return Container();
+            }
+          },
+        ));
   }
 
   String _getOperationText(ArithmeticOperation operation) {
@@ -59,14 +62,25 @@ class _ArithmeticExerciseGeneratorPageState
     }
   }
 
-  Widget _view(String text, BuildContext blocContext) {
+  Widget _view(String text, BuildContext blocContext,
+      NewExerciseArithmeticState? state) {
     return Column(children: [
       Text(text),
       _operationDropDown(),
       _generateExerciseButton(blocContext),
+      state != null ? _generateAnswerButton(blocContext, state) : Container(),
       _hideResultOnlyCheckbox(),
       _numberOfExercisesSlider(),
       _maxOperandValueSlider(),
+    ]);
+  }
+
+  Widget _answerView(
+      AnswerCheckArithmeticState state, BuildContext blocContext) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text(state.exercise.asArithmeticString(), key: const Key('exerciseText')),
+      _drawAnswerIcon(state.isCorrect),
+      _generateExerciseButton(blocContext)
     ]);
   }
 
@@ -92,12 +106,13 @@ class _ArithmeticExerciseGeneratorPageState
 
   ElevatedButton _generateExerciseButton(BuildContext blocContext) {
     return ElevatedButton(
+        key: const Key('generateExerciseButton'),
         onPressed: () {
-          blocContext.read<ArithmeticBloc>().add(GenerateNewExerciseArithmeticEvent(
-              selectedOperation,
-              hideResultOnly: hideResultOnly,
-              maxOperandValue: maxOperandValue,
-              numberOfExercises: numberOfExercises));
+          blocContext.read<ArithmeticBloc>().add(
+              GenerateNewExerciseArithmeticEvent(selectedOperation,
+                  hideResultOnly: hideResultOnly,
+                  maxOperandValue: maxOperandValue,
+                  numberOfExercises: numberOfExercises));
         },
         child: const Text('Generate Exercise'));
   }
@@ -150,5 +165,58 @@ class _ArithmeticExerciseGeneratorPageState
             });
           })
     ]);
+  }
+
+  Widget _generateAnswerButton(
+      BuildContext blocContext, NewExerciseArithmeticState state) {
+    var exercise = state.exercises.first;
+    var isOnlyResultHidden = exercise.operand1.isVisible &&
+        exercise.operand2.isVisible &&
+        !exercise.result.isVisible;
+    return Visibility(
+        visible: state.exercises.length == 1 && isOnlyResultHidden,
+        maintainSize: true,
+        maintainAnimation: true,
+        maintainState: true,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Answer: $answer'),
+            Slider(
+                key: const Key('answerSlider'),
+                value: answer.toDouble(),
+                min: 0,
+                max: 100,
+                divisions: 100,
+                label: '$answer',
+                onChanged: (double value) {
+                  setState(() {
+                    answer = value.toInt();
+                  });
+                }),
+            ElevatedButton(
+                key: const Key('answerButton'),
+                onPressed: () {
+                  blocContext.read<ArithmeticBloc>().add(
+                      CheckAnswerArithmeticEvent(
+                          state.exercises.first, answer));
+                },
+                child: const Text('Send Answer'))
+          ],
+        ));
+  }
+
+  _drawAnswerIcon(bool isCorrect) {
+    return isCorrect
+        ? const Icon(
+            Icons.check,
+            color: Colors.green,
+            key: Key('correctAnswerIcon'),
+          )
+        : const Icon(
+            Icons.close,
+            color: Colors.red,
+            key: Key('incorrectAnswerIcon'),
+          );
   }
 }
