@@ -95,5 +95,19 @@ void main() {
     expect(answerIcon, findsOneWidget);
   });
 
-
+  testWidgets('Show generate exercise on answer result screen', (widgetTester) async {
+    when(() => mockArithmeticBloc?.state)
+        .thenReturn(AnswerCheckArithmeticState(false, Exercise(
+        Operand(1, isVisible: true), Operand(2, isVisible: true),
+        ArithmeticOperation.addition, Operand(4, isVisible: true))
+    ));
+    await widgetTester.pumpWidget(MaterialApp(
+      home: BlocProvider<ArithmeticBloc>.value(
+        value: mockArithmeticBloc!,
+        child: const ArithmeticExerciseGeneratorPage(),
+      ),
+    ));
+    var generateExerciseButton = find.byKey(const Key('generateExerciseButton'));
+    expect(generateExerciseButton, findsOneWidget);
+  });
 }

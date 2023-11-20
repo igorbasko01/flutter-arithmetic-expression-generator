@@ -80,6 +80,7 @@ class _ArithmeticExerciseGeneratorPageState
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text(state.exercise.asArithmeticString(), key: const Key('exerciseText')),
       _drawAnswerIcon(state.isCorrect),
+      _generateExerciseButton(blocContext)
     ]);
   }
 
@@ -105,6 +106,7 @@ class _ArithmeticExerciseGeneratorPageState
 
   ElevatedButton _generateExerciseButton(BuildContext blocContext) {
     return ElevatedButton(
+        key: const Key('generateExerciseButton'),
         onPressed: () {
           blocContext.read<ArithmeticBloc>().add(
               GenerateNewExerciseArithmeticEvent(selectedOperation,
