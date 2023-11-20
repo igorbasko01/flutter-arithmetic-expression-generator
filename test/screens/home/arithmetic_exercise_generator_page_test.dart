@@ -44,4 +44,22 @@ void main() {
     expect(slider, findsOneWidget);
     expect(answerButton, findsOneWidget);
   });
+
+  testWidgets('Fully visible exercise appears on correct answer', (widgetTester) async {
+    when(() => mockArithmeticBloc?.state)
+        .thenReturn(AnswerCheckArithmeticState(true, Exercise(
+            Operand(1, isVisible: true), Operand(2, isVisible: true),
+            ArithmeticOperation.addition, Operand(3, isVisible: true))
+    ));
+    await widgetTester.pumpWidget(MaterialApp(
+      home: BlocProvider<ArithmeticBloc>.value(
+        value: mockArithmeticBloc!,
+        child: const ArithmeticExerciseGeneratorPage(),
+      ),
+    ));
+    var expectedExerciseText = '1 + 2 = 3';
+    var exerciseText = find.byKey(const Key('exerciseText'));
+    expect(exerciseText, findsOneWidget);
+    expect(find.text(expectedExerciseText), findsOneWidget);
+  });
 }

@@ -36,6 +36,8 @@ class _ArithmeticExerciseGeneratorPageState
               return _view(state.exercises
                   .map((e) => e.asArithmeticString())
                   .join('\n'), blocContext, state);
+            } else if (state is AnswerCheckArithmeticState) {
+              return _answerView(state, blocContext);
             } else {
               return Container();
             }
@@ -67,6 +69,12 @@ class _ArithmeticExerciseGeneratorPageState
       _hideResultOnlyCheckbox(),
       _numberOfExercisesSlider(),
       _maxOperandValueSlider(),
+    ]);
+  }
+
+  Widget _answerView(AnswerCheckArithmeticState state, BuildContext blocContext) {
+    return Column(children: [
+      Text(state.exercise.asArithmeticString(), key: const Key('exerciseText')),
     ]);
   }
 
@@ -183,7 +191,7 @@ class _ArithmeticExerciseGeneratorPageState
                 onPressed: () {
                   blocContext.read<ArithmeticBloc>().add(CheckAnswerArithmeticEvent(state.exercises.first, answer));
                 },
-                child: const Text('Generate Answer'))
+                child: const Text('Send Answer'))
           ],
         )
     );
