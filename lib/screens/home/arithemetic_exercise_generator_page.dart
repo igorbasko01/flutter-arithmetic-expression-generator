@@ -31,11 +31,13 @@ class _ArithmeticExerciseGeneratorPageState
         body: BlocBuilder<ArithmeticBloc, ArithmeticState>(
           builder: (blocContext, state) {
             if (state is InitialArithmeticState) {
-              return _view('Welcome to the Arithmetic Exercise Generator!', blocContext, null);
+              return _view('Welcome to the Arithmetic Exercise Generator!',
+                  blocContext, null);
             } else if (state is NewExerciseArithmeticState) {
-              return _view(state.exercises
-                  .map((e) => e.asArithmeticString())
-                  .join('\n'), blocContext, state);
+              return _view(
+                  state.exercises.map((e) => e.asArithmeticString()).join('\n'),
+                  blocContext,
+                  state);
             } else if (state is AnswerCheckArithmeticState) {
               return _answerView(state, blocContext);
             } else {
@@ -60,7 +62,8 @@ class _ArithmeticExerciseGeneratorPageState
     }
   }
 
-  Widget _view(String text, BuildContext blocContext, NewExerciseArithmeticState? state) {
+  Widget _view(String text, BuildContext blocContext,
+      NewExerciseArithmeticState? state) {
     return Column(children: [
       Text(text),
       _operationDropDown(),
@@ -72,9 +75,11 @@ class _ArithmeticExerciseGeneratorPageState
     ]);
   }
 
-  Widget _answerView(AnswerCheckArithmeticState state, BuildContext blocContext) {
-    return Column(children: [
+  Widget _answerView(
+      AnswerCheckArithmeticState state, BuildContext blocContext) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Text(state.exercise.asArithmeticString(), key: const Key('exerciseText')),
+      _drawAnswerIcon(state.isCorrect),
     ]);
   }
 
@@ -101,11 +106,11 @@ class _ArithmeticExerciseGeneratorPageState
   ElevatedButton _generateExerciseButton(BuildContext blocContext) {
     return ElevatedButton(
         onPressed: () {
-          blocContext.read<ArithmeticBloc>().add(GenerateNewExerciseArithmeticEvent(
-              selectedOperation,
-              hideResultOnly: hideResultOnly,
-              maxOperandValue: maxOperandValue,
-              numberOfExercises: numberOfExercises));
+          blocContext.read<ArithmeticBloc>().add(
+              GenerateNewExerciseArithmeticEvent(selectedOperation,
+                  hideResultOnly: hideResultOnly,
+                  maxOperandValue: maxOperandValue,
+                  numberOfExercises: numberOfExercises));
         },
         child: const Text('Generate Exercise'));
   }
@@ -160,13 +165,14 @@ class _ArithmeticExerciseGeneratorPageState
     ]);
   }
 
-  Widget _generateAnswerButton(BuildContext blocContext, NewExerciseArithmeticState state) {
+  Widget _generateAnswerButton(
+      BuildContext blocContext, NewExerciseArithmeticState state) {
     var exercise = state.exercises.first;
     var isOnlyResultHidden = exercise.operand1.isVisible &&
         exercise.operand2.isVisible &&
         !exercise.result.isVisible;
     return Visibility(
-      visible: state.exercises.length == 1 && isOnlyResultHidden,
+        visible: state.exercises.length == 1 && isOnlyResultHidden,
         maintainSize: true,
         maintainAnimation: true,
         maintainState: true,
@@ -189,11 +195,26 @@ class _ArithmeticExerciseGeneratorPageState
             ElevatedButton(
                 key: const Key('answerButton'),
                 onPressed: () {
-                  blocContext.read<ArithmeticBloc>().add(CheckAnswerArithmeticEvent(state.exercises.first, answer));
+                  blocContext.read<ArithmeticBloc>().add(
+                      CheckAnswerArithmeticEvent(
+                          state.exercises.first, answer));
                 },
                 child: const Text('Send Answer'))
           ],
-        )
-    );
+        ));
+  }
+
+  _drawAnswerIcon(bool isCorrect) {
+    return isCorrect
+        ? const Icon(
+            Icons.check,
+            color: Colors.green,
+            key: Key('correctAnswerIcon'),
+          )
+        : const Icon(
+            Icons.close,
+            color: Colors.red,
+            key: Key('incorrectAnswerIcon'),
+          );
   }
 }

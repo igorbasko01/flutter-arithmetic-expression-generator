@@ -62,4 +62,38 @@ void main() {
     expect(exerciseText, findsOneWidget);
     expect(find.text(expectedExerciseText), findsOneWidget);
   });
+
+  testWidgets('Show answer is correct icon on answer', (widgetTester) async {
+    when(() => mockArithmeticBloc?.state)
+        .thenReturn(AnswerCheckArithmeticState(true, Exercise(
+            Operand(1, isVisible: true), Operand(2, isVisible: true),
+            ArithmeticOperation.addition, Operand(3, isVisible: true))
+    ));
+    await widgetTester.pumpWidget(MaterialApp(
+      home: BlocProvider<ArithmeticBloc>.value(
+        value: mockArithmeticBloc!,
+        child: const ArithmeticExerciseGeneratorPage(),
+      ),
+    ));
+    var answerIcon = find.byKey(const Key('correctAnswerIcon'));
+    expect(answerIcon, findsOneWidget);
+  });
+
+  testWidgets('Show answer is wrong icon on answer', (widgetTester) async {
+    when(() => mockArithmeticBloc?.state)
+        .thenReturn(AnswerCheckArithmeticState(false, Exercise(
+        Operand(1, isVisible: true), Operand(2, isVisible: true),
+        ArithmeticOperation.addition, Operand(4, isVisible: true))
+    ));
+    await widgetTester.pumpWidget(MaterialApp(
+      home: BlocProvider<ArithmeticBloc>.value(
+        value: mockArithmeticBloc!,
+        child: const ArithmeticExerciseGeneratorPage(),
+      ),
+    ));
+    var answerIcon = find.byKey(const Key('incorrectAnswerIcon'));
+    expect(answerIcon, findsOneWidget);
+  });
+
+
 }
