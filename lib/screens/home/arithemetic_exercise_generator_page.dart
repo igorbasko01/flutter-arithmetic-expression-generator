@@ -28,21 +28,19 @@ class _ArithmeticExerciseGeneratorPageState
         appBar: AppBar(
           title: const Text('Arithmetic Exercise Generator'),
         ),
-        body: BlocProvider<ArithmeticBloc>(
-            create: (context) => ArithmeticBloc(),
-            child: BlocBuilder<ArithmeticBloc, ArithmeticState>(
-              builder: (blocContext, state) {
-                if (state is InitialArithmeticState) {
-                  return _view('Welcome to the Arithmetic Exercise Generator!', blocContext, null);
-                } else if (state is NewExerciseArithmeticState) {
-                  return _view(state.exercises
-                      .map((e) => e.asArithmeticString())
-                      .join('\n'), blocContext, state);
-                } else {
-                  return Container();
-                }
-              },
-            )));
+        body: BlocBuilder<ArithmeticBloc, ArithmeticState>(
+          builder: (blocContext, state) {
+            if (state is InitialArithmeticState) {
+              return _view('Welcome to the Arithmetic Exercise Generator!', blocContext, null);
+            } else if (state is NewExerciseArithmeticState) {
+              return _view(state.exercises
+                  .map((e) => e.asArithmeticString())
+                  .join('\n'), blocContext, state);
+            } else {
+              return Container();
+            }
+          },
+        ));
   }
 
   String _getOperationText(ArithmeticOperation operation) {
