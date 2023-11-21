@@ -170,11 +170,9 @@ class _ArithmeticExerciseGeneratorPageState
   Widget _generateAnswerButton(
       BuildContext blocContext, NewExerciseArithmeticState state) {
     var exercise = state.exercises.first;
-    var isOnlyResultHidden = exercise.operand1.isVisible &&
-        exercise.operand2.isVisible &&
-        !exercise.result.isVisible;
     return Visibility(
-        visible: state.exercises.length == 1 && isOnlyResultHidden,
+        key: const Key('answerVisibility'),
+        visible: state.exercises.length == 1,
         maintainSize: true,
         maintainAnimation: true,
         maintainState: true,

@@ -45,6 +45,27 @@ void main() {
     expect(answerButton, findsOneWidget);
   });
 
+  testWidgets('Answer slider appears when getting single exercise with the first operand hidden', (widgetTester) async {
+    when(() => mockArithmeticBloc?.state)
+        .thenReturn(NewExerciseArithmeticState([
+      Exercise(Operand(1, isVisible: false), Operand(2, isVisible: true),
+          ArithmeticOperation.addition, Operand(3, isVisible: true))
+    ]));
+    await widgetTester.pumpWidget(MaterialApp(
+      home: BlocProvider<ArithmeticBloc>.value(
+        value: mockArithmeticBloc!,
+        child: const ArithmeticExerciseGeneratorPage(),
+      ),
+    ));
+    var slider = find.byKey(const Key('answerSlider'));
+    var answerButton = find.byKey(const Key('answerButton'));
+    var visibilityFinder = find.byKey(const Key('answerVisibility'));
+    var visibility = widgetTester.widget<Visibility>(visibilityFinder);
+    expect(slider, findsOneWidget);
+    expect(answerButton, findsOneWidget);
+    expect(visibility.visible, true);
+  });
+
   testWidgets('Fully visible exercise appears on correct answer', (widgetTester) async {
     when(() => mockArithmeticBloc?.state)
         .thenReturn(AnswerCheckArithmeticState(true, Exercise(
