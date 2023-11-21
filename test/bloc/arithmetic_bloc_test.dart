@@ -242,4 +242,22 @@ void main() {
             })
           ]
   );
+
+  blocTest('Answer check event returns a result state where all operands are visible when the first operand is hidden',
+      build: () => ArithmeticBloc(),
+      act: (bloc) => bloc.add(CheckAnswerArithmeticEvent(
+          Exercise(Operand(1, isVisible: false), Operand(2, isVisible: true),
+              ArithmeticOperation.addition, Operand(3, isVisible: true)),
+          1)),
+      expect: () => [
+            predicate<AnswerCheckArithmeticState>((state) {
+              var expectedExercise = Exercise(
+                  Operand(1, isVisible: true),
+                  Operand(2, isVisible: true),
+                  ArithmeticOperation.addition,
+                  Operand(3, isVisible: true));
+              return state.isCorrect && state.exercise == expectedExercise;
+            })
+          ]
+  );
 }

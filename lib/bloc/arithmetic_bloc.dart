@@ -124,15 +124,21 @@ class ArithmeticBloc extends Bloc<ArithmeticEvent, ArithmeticState> {
 
   void _onCheckAnswerArithmeticEvent(
       CheckAnswerArithmeticEvent event, Emitter<ArithmeticState> emit) {
-    var exerciseWithVisibleResult = Exercise(
-        event.exercise.operand1,
-        event.exercise.operand2,
+    var exercise = event.exercise;
+    var operandToCheck = [
+      exercise.operand1,
+      exercise.operand2,
+      exercise.result
+    ].firstWhere((element) => !element.isVisible);
+    var exerciseWithVisibleOperands = Exercise(
+        Operand(event.exercise.operand1.value, isVisible: true),
+        Operand(event.exercise.operand2.value, isVisible: true),
         event.exercise.operator,
         Operand(event.exercise.result.value, isVisible: true));
-    if (event.exercise.result.value == event.answer) {
-      emit(AnswerCheckArithmeticState(true, exerciseWithVisibleResult));
+    if (operandToCheck.value == event.answer) {
+      emit(AnswerCheckArithmeticState(true, exerciseWithVisibleOperands));
     } else {
-      emit(AnswerCheckArithmeticState(false, exerciseWithVisibleResult));
+      emit(AnswerCheckArithmeticState(false, exerciseWithVisibleOperands));
     }
   }
 }
