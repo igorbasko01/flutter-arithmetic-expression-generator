@@ -24,6 +24,18 @@ class Exercise {
     }
   }
 
+  Operand? getHiddenOperand() {
+    if (!operand1.isVisible) {
+      return operand1;
+    } else if (!operand2.isVisible) {
+      return operand2;
+    } else if (!result.isVisible) {
+      return result;
+    } else {
+      return null;
+    }
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

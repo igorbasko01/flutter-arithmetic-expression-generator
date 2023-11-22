@@ -39,13 +39,13 @@ void main() {
         child: const ArithmeticExerciseGeneratorPage(),
       ),
     ));
-    var slider = find.byKey(const Key('answerSlider'));
+    var textField = find.byKey(const Key('answerTextField'));
     var answerButton = find.byKey(const Key('answerButton'));
-    expect(slider, findsOneWidget);
+    expect(textField, findsOneWidget);
     expect(answerButton, findsOneWidget);
   });
 
-  testWidgets('Answer slider appears when getting single exercise with the first operand hidden', (widgetTester) async {
+  testWidgets('Answer TextField appears when getting single exercise with the first operand hidden', (widgetTester) async {
     when(() => mockArithmeticBloc?.state)
         .thenReturn(NewExerciseArithmeticState([
       Exercise(Operand(1, isVisible: false), Operand(2, isVisible: true),
@@ -57,11 +57,11 @@ void main() {
         child: const ArithmeticExerciseGeneratorPage(),
       ),
     ));
-    var slider = find.byKey(const Key('answerSlider'));
+    var textField = find.byKey(const Key('answerTextField'));
     var answerButton = find.byKey(const Key('answerButton'));
     var visibilityFinder = find.byKey(const Key('answerVisibility'));
     var visibility = widgetTester.widget<Visibility>(visibilityFinder);
-    expect(slider, findsOneWidget);
+    expect(textField, findsOneWidget);
     expect(answerButton, findsOneWidget);
     expect(visibility.visible, true);
   });
