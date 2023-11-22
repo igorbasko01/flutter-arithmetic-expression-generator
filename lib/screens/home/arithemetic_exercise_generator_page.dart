@@ -169,7 +169,10 @@ class _ArithmeticExerciseGeneratorPageState
 
   Widget _generateAnswerButton(
       BuildContext blocContext, NewExerciseArithmeticState state) {
-    var exercise = state.exercises.first;
+    var actualAnswer = state.exercises.first.getHiddenOperand()?.value ?? 0;
+    var answerMin = (actualAnswer ~/ 10) * 10;
+    var answerMax = answerMin + 10;
+    answer = answer >= answerMin && answer <= answerMax ? answer : answerMin;
     return Visibility(
         key: const Key('answerVisibility'),
         visible: state.exercises.length == 1,
@@ -183,9 +186,9 @@ class _ArithmeticExerciseGeneratorPageState
             Slider(
                 key: const Key('answerSlider'),
                 value: answer.toDouble(),
-                min: 0,
-                max: 100,
-                divisions: 100,
+                min: answerMin.toDouble(),
+                max: answerMax.toDouble(),
+                divisions: 10,
                 label: '$answer',
                 onChanged: (double value) {
                   setState(() {
