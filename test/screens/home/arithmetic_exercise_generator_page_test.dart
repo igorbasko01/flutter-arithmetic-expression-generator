@@ -39,13 +39,13 @@ void main() {
         child: const ArithmeticExerciseGeneratorPage(),
       ),
     ));
-    var slider = find.byKey(const Key('answerSlider'));
+    var textField = find.byKey(const Key('answerTextField'));
     var answerButton = find.byKey(const Key('answerButton'));
-    expect(slider, findsOneWidget);
+    expect(textField, findsOneWidget);
     expect(answerButton, findsOneWidget);
   });
 
-  testWidgets('Answer slider appears when getting single exercise with the first operand hidden', (widgetTester) async {
+  testWidgets('Answer TextField appears when getting single exercise with the first operand hidden', (widgetTester) async {
     when(() => mockArithmeticBloc?.state)
         .thenReturn(NewExerciseArithmeticState([
       Exercise(Operand(1, isVisible: false), Operand(2, isVisible: true),
@@ -57,67 +57,13 @@ void main() {
         child: const ArithmeticExerciseGeneratorPage(),
       ),
     ));
-    var slider = find.byKey(const Key('answerSlider'));
+    var textField = find.byKey(const Key('answerTextField'));
     var answerButton = find.byKey(const Key('answerButton'));
     var visibilityFinder = find.byKey(const Key('answerVisibility'));
     var visibility = widgetTester.widget<Visibility>(visibilityFinder);
-    expect(slider, findsOneWidget);
+    expect(textField, findsOneWidget);
     expect(answerButton, findsOneWidget);
     expect(visibility.visible, true);
-  });
-
-  testWidgets('Answer slider shows 0-10 scale when the right answer is 2', (widgetTester) async {
-    when(() => mockArithmeticBloc?.state)
-        .thenReturn(NewExerciseArithmeticState([
-      Exercise(Operand(1, isVisible: true), Operand(2, isVisible: false),
-          ArithmeticOperation.addition, Operand(3, isVisible: true))
-    ]));
-    await widgetTester.pumpWidget(MaterialApp(
-      home: BlocProvider<ArithmeticBloc>.value(
-        value: mockArithmeticBloc!,
-        child: const ArithmeticExerciseGeneratorPage(),
-      ),
-    ));
-    var slider = find.byKey(const Key('answerSlider'));
-    var sliderWidget = widgetTester.widget<Slider>(slider);
-    expect(sliderWidget.min, 0);
-    expect(sliderWidget.max, 10);
-  });
-
-  testWidgets('Answer slider shows 20-30 scale when the right answer is 23', (widgetTester) async {
-    when(() => mockArithmeticBloc?.state)
-        .thenReturn(NewExerciseArithmeticState([
-      Exercise(Operand(1, isVisible: true), Operand(2, isVisible: true),
-          ArithmeticOperation.addition, Operand(23, isVisible: false))
-    ]));
-    await widgetTester.pumpWidget(MaterialApp(
-      home: BlocProvider<ArithmeticBloc>.value(
-        value: mockArithmeticBloc!,
-        child: const ArithmeticExerciseGeneratorPage(),
-      ),
-    ));
-    var slider = find.byKey(const Key('answerSlider'));
-    var sliderWidget = widgetTester.widget<Slider>(slider);
-    expect(sliderWidget.min, 20);
-    expect(sliderWidget.max, 30);
-  });
-
-  testWidgets('Answer slider shows 20-30 scale when the right answer is 27', (widgetTester) async {
-    when(() => mockArithmeticBloc?.state)
-        .thenReturn(NewExerciseArithmeticState([
-      Exercise(Operand(1, isVisible: true), Operand(2, isVisible: true),
-          ArithmeticOperation.addition, Operand(27, isVisible: false))
-    ]));
-    await widgetTester.pumpWidget(MaterialApp(
-      home: BlocProvider<ArithmeticBloc>.value(
-        value: mockArithmeticBloc!,
-        child: const ArithmeticExerciseGeneratorPage(),
-      ),
-    ));
-    var slider = find.byKey(const Key('answerSlider'));
-    var sliderWidget = widgetTester.widget<Slider>(slider);
-    expect(sliderWidget.min, 20);
-    expect(sliderWidget.max, 30);
   });
 
   testWidgets('Fully visible exercise appears on correct answer', (widgetTester) async {

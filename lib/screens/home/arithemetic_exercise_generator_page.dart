@@ -3,6 +3,7 @@ import 'package:arithmetic_expressions_generator/bloc/arithmetic_event.dart';
 import 'package:arithmetic_expressions_generator/bloc/arithmetic_state.dart';
 import 'package:arithmetic_expressions_generator/models/arithmetic_operation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ArithmeticExerciseGeneratorPage extends StatefulWidget {
@@ -169,10 +170,6 @@ class _ArithmeticExerciseGeneratorPageState
 
   Widget _generateAnswerButton(
       BuildContext blocContext, NewExerciseArithmeticState state) {
-    var actualAnswer = state.exercises.first.getHiddenOperand()?.value ?? 0;
-    var answerMin = (actualAnswer ~/ 10) * 10;
-    var answerMax = answerMin + 10;
-    answer = answer >= answerMin && answer <= answerMax ? answer : answerMin;
     return Visibility(
         key: const Key('answerVisibility'),
         visible: state.exercises.length == 1,
@@ -182,27 +179,33 @@ class _ArithmeticExerciseGeneratorPageState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Answer: $answer'),
-            Slider(
-                key: const Key('answerSlider'),
-                value: answer.toDouble(),
-                min: answerMin.toDouble(),
-                max: answerMax.toDouble(),
-                divisions: 10,
-                label: '$answer',
-                onChanged: (double value) {
-                  setState(() {
-                    answer = value.toInt();
-                  });
-                }),
-            ElevatedButton(
-                key: const Key('answerButton'),
-                onPressed: () {
-                  blocContext.read<ArithmeticBloc>().add(
-                      CheckAnswerArithmeticEvent(
-                          state.exercises.first, answer));
-                },
-                child: const Text('Send Answer'))
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    key: const Key('answerTextField'),
+                    decoration: const InputDecoration(labelText: 'Enter a number'),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                    onChanged: (String value) {
+                      setState(() {
+                        answer = int.tryParse(value) ?? 0;
+                      });
+                    },
+                  ),
+                ),
+                ElevatedButton(
+                    key: const Key('answerButton'),
+                    onPressed: () {
+                      blocContext.read<ArithmeticBloc>().add(
+                          CheckAnswerArithmeticEvent(
+                              state.exercises.first, answer));
+                    },
+                    child: const Text('Send Answer'))
+              ]
+            )
           ],
         ));
   }
