@@ -113,13 +113,25 @@ class ArithmeticBloc extends Bloc<ArithmeticEvent, ArithmeticState> {
   /// with different hidden operands.
   Exercise Function(int) _generateDivisionExercise() {
     return (int hiddenOperand) {
-      var first = random.nextInt(6) + 1;
-      var second = random.nextInt(6) + 1;
-      var operand1 = Operand(max(first, second), isVisible: hiddenOperand != 0);
-      var operand2 = Operand(min(first, second), isVisible: hiddenOperand != 1);
+      var higher = random.nextInt(10) + 1;
+      var possibleLowerValues = _possibleLowerValues(higher);
+      var lower = possibleLowerValues[random.nextInt(possibleLowerValues.length)];
+      var operand1 = Operand(higher, isVisible: hiddenOperand != 0);
+      var operand2 = Operand(lower, isVisible: hiddenOperand != 1);
       var result = Operand(operand1 ~/ operand2, isVisible: hiddenOperand != 2);
       return Exercise(operand1, operand2, ArithmeticOperation.division, result);
     };
+  }
+
+  List<int> _possibleLowerValues(int higher) {
+    var possibleLowerValues = <int>[];
+    for (var i = 1; i <= higher; i++) {
+      if (higher % i == 0) {
+        possibleLowerValues.add(i);
+      }
+    }
+    return possibleLowerValues;
+
   }
 
   void _onCheckAnswerArithmeticEvent(

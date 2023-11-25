@@ -106,7 +106,7 @@ void main() {
                   exercise.operand2 > 0 &&
                   exercise.operand2 <= exercise.operand1 &&
                   exercise.operator == ArithmeticOperation.division &&
-                  exercise.result == exercise.operand1 ~/ exercise.operand2 &&
+                  exercise.result.value == exercise.operand1 ~/ exercise.operand2 &&
                   _numberOfHiddenOperands(exercise) == 1;
             })
           ]);
@@ -114,7 +114,7 @@ void main() {
   blocTest('Division puts the larger operand first',
       build: () {
         final mockRandom = MockRandom();
-        mockRandomNumberGenerator(mockRandom, [2, 1, 2]);
+        mockRandomNumberGenerator(mockRandom, [2, 1, 1]);
         return ArithmeticBloc(randomGenerator: mockRandom);
       },
       act: (bloc) => bloc.add(
@@ -126,9 +126,9 @@ void main() {
                   exercise.operand2 > 0 &&
                   exercise.operand1 >= exercise.operand2 &&
                   exercise.operator == ArithmeticOperation.division &&
-                  exercise.result == exercise.operand1 ~/ exercise.operand2 &&
+                  exercise.result.value == exercise.operand1 ~/ exercise.operand2 &&
                   _numberOfHiddenOperands(exercise) == 1 &&
-                  exercise.operand1.value == 3 &&
+                  exercise.operand1.value == 2 &&
                   exercise.operand2.value == 2;
             })
           ]);
