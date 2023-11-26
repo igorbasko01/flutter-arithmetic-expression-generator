@@ -115,7 +115,8 @@ class ArithmeticBloc extends Bloc<ArithmeticEvent, ArithmeticState> {
     return (int hiddenOperand) {
       var higher = random.nextInt(10) + 1;
       var possibleLowerValues = _possibleLowerValues(higher);
-      var lower = possibleLowerValues[random.nextInt(possibleLowerValues.length)];
+      var lower =
+          possibleLowerValues[random.nextInt(possibleLowerValues.length)];
       var operand1 = Operand(higher, isVisible: hiddenOperand != 0);
       var operand2 = Operand(lower, isVisible: hiddenOperand != 1);
       var result = Operand(operand1 ~/ operand2, isVisible: hiddenOperand != 2);
@@ -131,26 +132,27 @@ class ArithmeticBloc extends Bloc<ArithmeticEvent, ArithmeticState> {
       }
     }
     return possibleLowerValues;
-
   }
 
   void _onCheckAnswerArithmeticEvent(
       CheckAnswerArithmeticEvent event, Emitter<ArithmeticState> emit) {
     var exercise = event.exercise;
-    var operandToCheck = [
-      exercise.operand1,
-      exercise.operand2,
-      exercise.result
-    ].firstWhere((element) => !element.isVisible);
-    var exerciseWithVisibleOperands = Exercise(
-        Operand(event.exercise.operand1.value, isVisible: true),
-        Operand(event.exercise.operand2.value, isVisible: true),
-        event.exercise.operator,
-        Operand(event.exercise.result.value, isVisible: true));
-    if (operandToCheck.value == event.answer) {
-      emit(AnswerCheckArithmeticState(true, exerciseWithVisibleOperands));
-    } else {
-      emit(AnswerCheckArithmeticState(false, exerciseWithVisibleOperands));
-    }
+    var exerciseWithUserAnswer = Exercise(
+        Operand(
+            exercise.operand1.isVisible
+                ? exercise.operand1.value
+                : event.answer,
+            isVisible: true),
+        Operand(
+            exercise.operand2.isVisible
+                ? exercise.operand2.value
+                : event.answer,
+            isVisible: true),
+        exercise.operator,
+        Operand(
+            exercise.result.isVisible ? exercise.result.value : event.answer,
+            isVisible: true));
+    emit(AnswerCheckArithmeticState(exerciseWithUserAnswer.isCorrect(),
+        exercise.copyWithAllVisible()));
   }
 }

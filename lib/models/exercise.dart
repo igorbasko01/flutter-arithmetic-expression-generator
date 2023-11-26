@@ -36,6 +36,29 @@ class Exercise {
     }
   }
 
+  bool isCorrect() {
+    switch (operator) {
+      case ArithmeticOperation.addition:
+        return operand1 + operand2 == result.value;
+      case ArithmeticOperation.subtraction:
+        return operand1 - operand2 == result.value;
+      case ArithmeticOperation.multiplication:
+        return operand1 * operand2 == result.value;
+      case ArithmeticOperation.division:
+        return operand1 ~/ operand2 == result.value;
+      default:
+        return false;
+    }
+  }
+
+  Exercise copyWithAllVisible() {
+    return Exercise(
+        operand1.copyWithVisible(true),
+        operand2.copyWithVisible(true),
+        operator,
+        result.copyWithVisible(true));
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

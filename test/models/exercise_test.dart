@@ -30,4 +30,76 @@ void main() {
         Operand(3, isVisible: false));
     expect(exercise.getHiddenOperand(), Operand(3, isVisible: false));
   });
+
+  test('Addition exercise evaluates to correct when left side equals result', () {
+    final exercise = Exercise(
+        Operand(1),
+        Operand(2),
+        ArithmeticOperation.addition,
+        Operand(3));
+    expect(exercise.isCorrect(), true);
+  });
+
+  test('Addition exercise evaluates to incorrect when left side does not equal result', () {
+    final exercise = Exercise(
+        Operand(1),
+        Operand(2),
+        ArithmeticOperation.addition,
+        Operand(4));
+    expect(exercise.isCorrect(), false);
+  });
+
+  test('Subtraction exercise evaluates to correct when left side equals result', () {
+    final exercise = Exercise(
+        Operand(3),
+        Operand(2),
+        ArithmeticOperation.subtraction,
+        Operand(1));
+    expect(exercise.isCorrect(), true);
+  });
+
+  test('Subtraction exercise evaluates to incorrect when left side does not equal result', () {
+    final exercise = Exercise(
+        Operand(3),
+        Operand(2),
+        ArithmeticOperation.subtraction,
+        Operand(2));
+    expect(exercise.isCorrect(), false);
+  });
+
+  test('Multiplication exercise evaluates to correct when left side equals result', () {
+    final exercise = Exercise(
+        Operand(3),
+        Operand(2),
+        ArithmeticOperation.multiplication,
+        Operand(6));
+    expect(exercise.isCorrect(), true);
+  });
+
+  test('Multiplication exercise evaluates to incorrect when left side does not equal result', () {
+    final exercise = Exercise(
+        Operand(3),
+        Operand(2),
+        ArithmeticOperation.multiplication,
+        Operand(7));
+    expect(exercise.isCorrect(), false);
+  });
+
+  test('Division exercise evaluates to correct when left side equals result', () {
+    final exercise = Exercise(
+        Operand(6),
+        Operand(2),
+        ArithmeticOperation.division,
+        Operand(3));
+    expect(exercise.isCorrect(), true);
+  });
+
+  test('Division exercise evaluates to incorrect when left side does not equal result', () {
+    final exercise = Exercise(
+        Operand(6),
+        Operand(2),
+        ArithmeticOperation.division,
+        Operand(4));
+    expect(exercise.isCorrect(), false);
+  });
 }
