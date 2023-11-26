@@ -260,4 +260,22 @@ void main() {
             })
           ]
   );
+
+  blocTest('Multiplication exercise with zero operand should accept any answer',
+    build: () => ArithmeticBloc(),
+    act: (bloc) => bloc.add(CheckAnswerArithmeticEvent(
+        Exercise(Operand(0, isVisible: true), Operand(2, isVisible: false),
+            ArithmeticOperation.multiplication, Operand(0, isVisible: true)),
+        1)),
+    expect: () => [
+          predicate<AnswerCheckArithmeticState>((state) {
+            var expectedExercise = Exercise(
+                Operand(0, isVisible: true),
+                Operand(2, isVisible: true),
+                ArithmeticOperation.multiplication,
+                Operand(0, isVisible: true));
+            return state.isCorrect && state.exercise == expectedExercise;
+          })
+        ]
+  );
 }

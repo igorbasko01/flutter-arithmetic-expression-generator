@@ -9,6 +9,10 @@ class Operand {
     return isVisible ? value.toString() : '_';
   }
 
+  Operand copyWithVisible(bool visible) {
+    return Operand(value, isVisible: visible);
+  }
+
   bool operator <=(Object other) {
     if (other is Operand) {
       return value <= other.value;
