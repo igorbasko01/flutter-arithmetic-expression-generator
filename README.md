@@ -19,7 +19,7 @@ Allows generating multiple expressions at once.
 
 ![img.png](docs/img1.png)
 
-Provides a way to answer a generated expression in the app, only if one was generated.
+Provides a way to answer a generated expression in the app, only if a single expression was generated.
 
 ![img.png](docs/img2.png)
 ### Number Recognition
