@@ -1,16 +1,24 @@
-# arithmetic_expressions_generator
+# Arithmetic Expressions Generator
 
-A Flutter App that generates Arithmetic Expressions Generator
+A Flutter application that generates simple arithmetic expressions
 
 ## Getting Started
+To use the application, you need to have Flutter installed on your machine. 
+If you don't have it, you can follow the instructions on the [Flutter website](https://flutter.dev/docs/get-started/install).
 
-This project is a starting point for a Flutter application.
+After installing Flutter, you can clone the repository and run the application on your device or emulator.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Screenshots
+### Main menu
+![img.png](docs/img.png)
+### Arithmetic Expressions Generator.
+Allows generating multiple expressions at once.
+1. Also hides the different operands to make it more challenging.
+2. Allows hiding only the result.
+3. Allows changing the maximum operand value.
+![img.png](docs/img1.png)
+Provides a way to answer a generated expression in the app, only if one was generated.
+![img.png](docs/img2.png)
+### Number Recognition
+Allows recognizing numbers by counting a random number of objects.
+![img.png](docs/img3.png)
