@@ -119,6 +119,46 @@ void main() {
                 .having((state) => state.possibleAnswers, 'answers', [1, 3, 2]),
           ]);
 
+  blocTest(
+    'Correct answer can be the largest number answer',
+    build: () {
+      final mockRandom = MockRandom();
+      mockRandomNumberGenerator(mockRandom, [0, 2, 2, 1]);
+      return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
+    },
+    act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
+    expect: () => [
+      isA<ExerciseNumberRecognitionState>()
+          .having((state) => state.possibleAnswers, 'answers', [2, 1, 3]),
+    ],
+  );
+
+  blocTest('Correct answer can be the lowest number answer',
+      build: () {
+        final mockRandom = MockRandom();
+        mockRandomNumberGenerator(mockRandom, [0, 2, 2, 2]);
+        return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
+      },
+      act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
+      expect: () => [
+            isA<ExerciseNumberRecognitionState>()
+                .having((state) => state.possibleAnswers, 'answers', [4, 5, 3]),
+          ]);
+
+  blocTest(
+      'Correct answer under 3 and largest number strategy selected should default to default strategy',
+      build: () {
+        final mockRandom = MockRandom();
+        mockRandomNumberGenerator(
+            mockRandom, [0, 1, 2, 1]);
+        return NumberRecognitionBloc(randomNumberGenerator: mockRandom);
+      },
+      act: (bloc) => bloc.add(GenerateNewExerciseNumberRecognitionEvent()),
+      expect: () => [
+            isA<ExerciseNumberRecognitionState>()
+                .having((state) => state.possibleAnswers, 'answers', [1, 3, 2]),
+          ]);
+
   blocTest('On correct answer return state isCorrect true',
       build: () => NumberRecognitionBloc(),
       act: (bloc) => bloc.add(CheckAnswerNumberRecognitionEvent(2, 2)),
@@ -145,10 +185,9 @@ void main() {
 
   blocTest('On wrong answer return state correctAnswer as correct answer',
       build: () => NumberRecognitionBloc(),
-    act: (bloc) => bloc.add(CheckAnswerNumberRecognitionEvent(2, 3)),
-    expect: () => [
-          isA<AnswerNumberRecognitionState>()
-              .having((state) => state.correctAnswer, 'correctAnswer', 2)
-        ]
-  );
+      act: (bloc) => bloc.add(CheckAnswerNumberRecognitionEvent(2, 3)),
+      expect: () => [
+            isA<AnswerNumberRecognitionState>()
+                .having((state) => state.correctAnswer, 'correctAnswer', 2)
+          ]);
 }

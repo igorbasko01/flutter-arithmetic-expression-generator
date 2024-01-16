@@ -3,8 +3,13 @@ import 'package:mocktail/mocktail.dart';
 
 class MockRandom extends Mock implements RandomNumberGenerator {}
 
-void mockRandomNumberGenerator(MockRandom mockRandom, List<int> answers) {
+void mockRandomNumberGenerator(MockRandom mockRandom, List<int> answers, {defaultValue = 0}) {
   var callCount = 0;
   when(() => mockRandom.nextInt(any()))
-      .thenAnswer((_) => answers[callCount++]);
+      .thenAnswer((_) {
+        if (callCount >= answers.length) {
+          return defaultValue;
+        }
+        return answers[callCount++];
+      });
 }
