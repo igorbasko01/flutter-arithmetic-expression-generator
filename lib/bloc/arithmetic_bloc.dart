@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:arithmetic_expressions_generator/bloc/arithmetic_event.dart';

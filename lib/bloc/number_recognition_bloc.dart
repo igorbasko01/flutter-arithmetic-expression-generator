@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:arithmetic_expressions_generator/bloc/number_recognition_event.dart';
 import 'package:arithmetic_expressions_generator/bloc/number_recognition_state.dart';
 import 'package:arithmetic_expressions_generator/utils/random_number_generator.dart';
