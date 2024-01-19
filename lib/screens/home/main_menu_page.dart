@@ -35,6 +35,7 @@ class MainMenuPageView extends StatelessWidget {
             child: Column(
           children: [
             ElevatedButton(
+                key: const Key('arithmeticExpressionsButton'),
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
                     return BlocProvider.value(
@@ -44,6 +45,7 @@ class MainMenuPageView extends StatelessWidget {
                 },
                 child: const Text('Arithmetic Exercise Generator')),
             ElevatedButton(
+                key: const Key('numberRecognitionButton'),
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
                     return BlocProvider.value(
@@ -51,7 +53,18 @@ class MainMenuPageView extends StatelessWidget {
                         child: const NumberRecognitionPage());
                   }));
                 },
-                child: const Text('Number Recognition'))
+                child: const Text('Number Recognition')),
+            ElevatedButton(
+                key: const Key('arithmeticExpressionsGameButton'),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) {
+                    return BlocProvider.value(
+                        value: BlocProvider.of<ArithmeticBloc>(context),
+                        child: const ArithmeticExerciseGeneratorPage());
+                  }));
+                },
+                child: const Text('Arithmetic Expressions Game')
+            )
           ],
         )));
   }
