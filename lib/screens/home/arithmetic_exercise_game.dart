@@ -1,5 +1,10 @@
+import 'package:arithmetic_expressions_generator/bloc/arithmetic_bloc.dart';
+import 'package:arithmetic_expressions_generator/bloc/arithmetic_event.dart';
+import 'package:arithmetic_expressions_generator/bloc/arithmetic_state.dart';
 import 'package:arithmetic_expressions_generator/models/arithmetic_operation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ArithmeticExerciseGamePage extends StatefulWidget {
   const ArithmeticExerciseGamePage({Key? key}) : super(key: key);
@@ -13,6 +18,7 @@ class _ArithmeticExerciseGamePageState
     extends State<ArithmeticExerciseGamePage> {
   int _maxOperandValue = 30;
   ArithmeticOperation _selectedOperation = ArithmeticOperation.addition;
+  int _answer = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +26,16 @@ class _ArithmeticExerciseGamePageState
       appBar: AppBar(
         title: const Text('Arithmetic Exercise Game'),
       ),
-      body: const Center(
-        child: Text('Arithmetic Exercise Game'),
+      body: BlocBuilder<ArithmeticBloc, ArithmeticState>(
+        builder: (blocContext, state) {
+          if (state is InitialArithmeticState) {
+            return _newGameButton(blocContext);
+          } else if (state is NewExerciseArithmeticState) {
+            return _exerciseDisplay(blocContext, state);
+          } else {
+            return const Center(child: Text('Something went wrong.'));
+          }
+        },
       ),
       bottomSheet: _settings(),
     );
@@ -66,5 +80,53 @@ class _ArithmeticExerciseGamePageState
                         })
                   ]));
         });
+  }
+
+  Widget _newGameButton(BuildContext blocContext) {
+    return Center(
+        child: Column(children: [
+      const Text('Welcome to the Arithmetic Exercise Game!'),
+      ElevatedButton(
+          key: const Key('newGameButton'),
+          onPressed: () {
+            blocContext.read<ArithmeticBloc>().add(
+                GenerateNewExerciseArithmeticEvent(_selectedOperation,
+                    maxOperandValue: _maxOperandValue));
+          },
+          child: const Text('New Game'))
+    ]));
+  }
+
+  Widget _exerciseDisplay(
+      BuildContext blocContext, NewExerciseArithmeticState state) {
+    return Center(
+        child: Column(
+            children: [
+              Text(state.exercises.first.asArithmeticString()),
+              Row(children: [
+                Expanded(
+                  child: TextField(
+                    decoration: const InputDecoration(labelText: 'Enter a number'),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                    onChanged: (String value) {
+                      setState(() {
+                        _answer = int.tryParse(value) ?? 0;
+                      });
+                    },
+                  )
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    blocContext.read<ArithmeticBloc>().add(
+                      CheckAnswerArithmeticEvent(state.exercises.first, _answer)
+                    );
+                  },
+                  child: const Text('Answer')
+                )
+              ])
+            ]));
   }
 }
