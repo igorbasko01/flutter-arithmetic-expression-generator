@@ -32,6 +32,8 @@ class _ArithmeticExerciseGamePageState
             return _newGameButton(blocContext);
           } else if (state is NewExerciseArithmeticState) {
             return _exerciseDisplay(blocContext, state);
+          } else if (state is AnswerCheckArithmeticState) {
+            return _answerDisplay(blocContext, state);
           } else {
             return const Center(child: Text('Something went wrong.'));
           }
@@ -100,33 +102,61 @@ class _ArithmeticExerciseGamePageState
   Widget _exerciseDisplay(
       BuildContext blocContext, NewExerciseArithmeticState state) {
     return Center(
-        child: Column(
-            children: [
-              Text(state.exercises.first.asArithmeticString()),
-              Row(children: [
-                Expanded(
-                  child: TextField(
-                    decoration: const InputDecoration(labelText: 'Enter a number'),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
-                    onChanged: (String value) {
-                      setState(() {
-                        _answer = int.tryParse(value) ?? 0;
-                      });
-                    },
-                  )
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    blocContext.read<ArithmeticBloc>().add(
-                      CheckAnswerArithmeticEvent(state.exercises.first, _answer)
-                    );
-                  },
-                  child: const Text('Answer')
-                )
-              ])
-            ]));
+        child: Column(children: [
+      Text(state.exercises.first.asArithmeticString()),
+      Row(children: [
+        Expanded(
+            child: TextField(
+          decoration: const InputDecoration(labelText: 'Enter a number'),
+          keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.digitsOnly
+          ],
+          onChanged: (String value) {
+            setState(() {
+              _answer = int.tryParse(value) ?? 0;
+            });
+          },
+        )),
+        ElevatedButton(
+            onPressed: () {
+              blocContext.read<ArithmeticBloc>().add(
+                  CheckAnswerArithmeticEvent(state.exercises.first, _answer));
+            },
+            child: const Text('Answer'))
+      ])
+    ]));
+  }
+
+  Widget _answerDisplay(
+      BuildContext blocContext, AnswerCheckArithmeticState state) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(state.exercise.asArithmeticString()),
+        _drawAnswerIcon(state.isCorrect),
+        ElevatedButton(
+            onPressed: () {
+              blocContext.read<ArithmeticBloc>().add(
+                  GenerateNewExerciseArithmeticEvent(_selectedOperation,
+                      maxOperandValue: _maxOperandValue));
+            },
+            child: const Text('Next Exercise'))
+      ],
+    );
+  }
+
+  _drawAnswerIcon(bool isCorrect) {
+    return isCorrect
+        ? const Icon(
+            Icons.check,
+            color: Colors.green,
+            key: Key('correctAnswerIcon'),
+          )
+        : const Icon(
+            Icons.close,
+            color: Colors.red,
+            key: Key('incorrectAnswerIcon'),
+          );
   }
 }
