@@ -99,7 +99,7 @@ class ArithmeticBloc extends Bloc<ArithmeticEvent, ArithmeticState> {
   Exercise Function(int) _generateMultiplicationExercise() {
     return (int hiddenOperand) {
       var operand1 = Operand(random.nextInt(11), isVisible: hiddenOperand != 0);
-      var operand2 = Operand(random.nextInt(6), isVisible: hiddenOperand != 1);
+      var operand2 = Operand(random.nextInt(11), isVisible: hiddenOperand != 1);
       var result = Operand(operand1 * operand2, isVisible: hiddenOperand != 2);
       return Exercise(
           operand1, operand2, ArithmeticOperation.multiplication, result);
