@@ -14,6 +14,6 @@ class EqualOrGreaterBloc
   FutureOr<void> _onGenerateNewExerciseEqualOrGreaterEvent(
       GenerateNewExerciseEqualOrGreaterEvent event,
       Emitter<EqualOrGreaterState> emit) {
-    emit(ExerciseEqualOrGreaterState());
+    emit(ExerciseEqualOrGreaterState(1, 2));
   }
 }

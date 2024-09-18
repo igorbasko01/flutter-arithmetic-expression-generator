@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NumberRecognitionPage extends StatefulWidget {
-  const NumberRecognitionPage({Key? key}) : super(key: key);
+  const NumberRecognitionPage({super.key});
 
   @override
   State<NumberRecognitionPage> createState() => _NumberRecognitionPageState();

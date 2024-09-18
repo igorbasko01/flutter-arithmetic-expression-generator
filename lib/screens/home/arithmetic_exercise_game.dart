@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ArithmeticExerciseGamePage extends StatefulWidget {
-  const ArithmeticExerciseGamePage({Key? key}) : super(key: key);
+  const ArithmeticExerciseGamePage({super.key});
 
   @override
   State<ArithmeticExerciseGamePage> createState() =>

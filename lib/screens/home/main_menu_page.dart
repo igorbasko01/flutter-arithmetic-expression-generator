@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MainMenuPage extends StatelessWidget {
-  const MainMenuPage({Key? key}) : super(key: key);
+  const MainMenuPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class MainMenuPage extends StatelessWidget {
 }
 
 class MainMenuPageView extends StatelessWidget {
-  const MainMenuPageView({Key? key}) : super(key: key);
+  const MainMenuPageView({super.key});
 
   @override
   Widget build(BuildContext context) {
