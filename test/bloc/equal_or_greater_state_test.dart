@@ -18,12 +18,10 @@ void main() {
   });
 
   test('exercise cant have a negative value for left', () {
-    // TODO: implement test
-    // expect(() => ExerciseEqualOrGreaterState(-1, 1), throwsAssertionError);
+    expect(() => ExerciseEqualOrGreaterState(-1, 1), throwsAssertionError);
   });
 
   test('exercise cant have a negative value for right', () {
-    // TODO: implement test
-    // expect(() => ExerciseEqualOrGreaterState(1, -1), throwsAssertionError);
+    expect(() => ExerciseEqualOrGreaterState(1, -1), throwsAssertionError);
   });
 }
