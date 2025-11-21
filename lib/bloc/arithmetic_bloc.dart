@@ -35,12 +35,12 @@ class ArithmeticBloc extends Bloc<ArithmeticEvent, ArithmeticState> {
       emit(NewExerciseArithmeticState(_generateExercises(
           event.numberOfExercises,
           event.hideResultOnly,
-          _generateMultiplicationExercise())));
+          _generateMultiplicationExercise(event.maxOperandValue))));
     } else if (event.operation == ArithmeticOperation.division) {
       emit(NewExerciseArithmeticState(_generateExercises(
           event.numberOfExercises,
           event.hideResultOnly,
-          _generateDivisionExercise())));
+          _generateDivisionExercise(event.maxOperandValue))));
     }
   }
 
@@ -96,10 +96,10 @@ class ArithmeticBloc extends Bloc<ArithmeticEvent, ArithmeticState> {
   /// that generates a multiplication exercise.
   /// To allow generation of multiple functions that generate exercises
   /// with different hidden operands.
-  Exercise Function(int) _generateMultiplicationExercise() {
+  Exercise Function(int) _generateMultiplicationExercise(int maxOperandValue) {
     return (int hiddenOperand) {
-      var operand1 = Operand(random.nextInt(11), isVisible: hiddenOperand != 0);
-      var operand2 = Operand(random.nextInt(11), isVisible: hiddenOperand != 1);
+      var operand1 = Operand(random.nextInt(maxOperandValue + 1), isVisible: hiddenOperand != 0);
+      var operand2 = Operand(random.nextInt(maxOperandValue + 1), isVisible: hiddenOperand != 1);
       var result = Operand(operand1 * operand2, isVisible: hiddenOperand != 2);
       return Exercise(
           operand1, operand2, ArithmeticOperation.multiplication, result);
@@ -110,9 +110,9 @@ class ArithmeticBloc extends Bloc<ArithmeticEvent, ArithmeticState> {
   /// that generates a division exercise.
   /// To allow generation of multiple functions that generate exercises
   /// with different hidden operands.
-  Exercise Function(int) _generateDivisionExercise() {
+  Exercise Function(int) _generateDivisionExercise(int maxOperandValue) {
     return (int hiddenOperand) {
-      var higher = random.nextInt(10) + 1;
+      var higher = random.nextInt(maxOperandValue) + 1;
       var possibleLowerValues = _possibleLowerValues(higher);
       var lower =
           possibleLowerValues[random.nextInt(possibleLowerValues.length)];

@@ -17,7 +17,6 @@ class ArithmeticExerciseGeneratorPage extends StatefulWidget {
 class _ArithmeticExerciseGeneratorPageState
     extends State<ArithmeticExerciseGeneratorPage> {
   ArithmeticOperation selectedOperation = ArithmeticOperation.addition;
-  bool showMaxOperandValueSlider = true;
   bool hideResultOnly = false;
   int maxOperandValue = 30;
   int numberOfExercises = 3;
@@ -95,12 +94,6 @@ class _ArithmeticExerciseGeneratorPageState
         onChanged: (ArithmeticOperation? operation) {
           setState(() {
             selectedOperation = operation!;
-            if (selectedOperation == ArithmeticOperation.multiplication ||
-                selectedOperation == ArithmeticOperation.division) {
-              showMaxOperandValueSlider = false;
-            } else {
-              showMaxOperandValueSlider = true;
-            }
           });
         });
   }
@@ -129,26 +122,21 @@ class _ArithmeticExerciseGeneratorPageState
         });
   }
 
-  Visibility _maxOperandValueSlider() {
-    return Visibility(
-        visible: showMaxOperandValueSlider,
-        maintainSize: true,
-        maintainAnimation: true,
-        maintainState: true,
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('Max operand value: $maxOperandValue'),
-          Slider(
-              value: maxOperandValue.toDouble(),
-              min: 0,
-              max: 1000,
-              divisions: 200,
-              label: '$maxOperandValue',
-              onChanged: (double value) {
-                setState(() {
-                  maxOperandValue = value.toInt();
-                });
-              })
-        ]));
+  Column _maxOperandValueSlider() {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text('Max operand value: $maxOperandValue'),
+      Slider(
+          value: maxOperandValue.toDouble(),
+          min: 0,
+          max: 1000,
+          divisions: 200,
+          label: '$maxOperandValue',
+          onChanged: (double value) {
+            setState(() {
+              maxOperandValue = value.toInt();
+            });
+          })
+    ]);
   }
 
   Column _numberOfExercisesSlider() {
