@@ -180,6 +180,37 @@ void main() {
           ]);
 
   blocTest(
+      'Returns new multiplication exercise limited by the max operand value parameter',
+      build: () => ArithmeticBloc(),
+      act: (bloc) => bloc.add(GenerateNewExerciseArithmeticEvent(
+          ArithmeticOperation.multiplication,
+          maxOperandValue: 5)),
+      expect: () => [
+            predicate<NewExerciseArithmeticState>((state) {
+              var exercise = state.exercises.first;
+              return exercise.operand1.value <= 5 &&
+                  exercise.operand2.value <= 5 &&
+                  exercise.result.value <= 25;
+            })
+          ]);
+
+  blocTest(
+      'Returns new division exercise limited by the max operand value parameter',
+      build: () => ArithmeticBloc(),
+      act: (bloc) => bloc.add(GenerateNewExerciseArithmeticEvent(
+          ArithmeticOperation.division,
+          maxOperandValue: 5)),
+      expect: () => [
+            predicate<NewExerciseArithmeticState>((state) {
+              var exercise = state.exercises.first;
+              return exercise.operand1.value <= 5 &&
+                  exercise.operand2.value <= 5 &&
+                  exercise.operand2.value > 0 &&
+                  exercise.result.value <= 5;
+            })
+          ]);
+
+  blocTest(
       'Returns multiple exercise when passed number of exercises parameter',
       build: () => ArithmeticBloc(),
       act: (bloc) => bloc.add(GenerateNewExerciseArithmeticEvent(
