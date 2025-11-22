@@ -8,6 +8,34 @@ If you don't have it, you can follow the instructions on the [Flutter website](h
 
 After installing Flutter, you can clone the repository and run the application on your device or emulator.
 
+## CI/CD Pipeline
+
+This project includes a GitHub Actions CI/CD pipeline that automatically:
+- Runs code analysis and tests on every push and pull request
+- Builds a debug APK for every commit
+- Creates releases with downloadable APKs when version tags are pushed
+
+### Downloading APKs
+
+**From Workflow Artifacts** (for any commit):
+1. Go to the [Actions tab](../../actions)
+2. Click on a workflow run
+3. Download the `app-debug` artifact from the "Artifacts" section
+
+**From Releases** (for tagged versions):
+1. Go to the [Releases section](../../releases)
+2. Download the APK from the latest release
+
+### Creating a Release
+
+To create a new release with an APK:
+1. Create and push a version tag:
+   ```bash
+   git tag v1.0.0
+   git push origin v1.0.0
+   ```
+2. The CI pipeline will automatically build the APK and create a release
+
 ## Screenshots
 ### Main menu
 ![img.png](docs/img.png)
