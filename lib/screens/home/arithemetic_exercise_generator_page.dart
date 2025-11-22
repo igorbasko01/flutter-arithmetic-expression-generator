@@ -57,8 +57,6 @@ class _ArithmeticExerciseGeneratorPageState
         return 'Multiplication';
       case ArithmeticOperation.division:
         return 'Division';
-      default:
-        return '';
     }
   }
 

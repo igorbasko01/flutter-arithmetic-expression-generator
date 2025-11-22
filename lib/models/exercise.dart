@@ -19,8 +19,6 @@ class Exercise {
         return '$operand1 x $operand2 = $result';
       case ArithmeticOperation.division:
         return '$operand1 : $operand2 = $result';
-      default:
-        return '';
     }
   }
 
@@ -46,8 +44,6 @@ class Exercise {
         return operand1 * operand2 == result.value;
       case ArithmeticOperation.division:
         return operand1 ~/ operand2 == result.value;
-      default:
-        return false;
     }
   }
 
