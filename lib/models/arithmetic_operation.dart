@@ -15,8 +15,6 @@ enum ArithmeticOperation {
         return 'Multiplication';
       case ArithmeticOperation.division:
         return 'Division';
-      default:
-        return '';
     }
   }
 }
